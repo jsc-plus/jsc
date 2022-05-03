@@ -1,0 +1,17 @@
+{
+    "name": "jsc",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "bin": {
+        "jsc": "dist/main.js"
+    },
+    "scripts": {
+        "build": "tsc"
+    },
+    "author": "hailongz@qq.com",
+    "license": "BSD 3-Clause License",
+    "dependencies": {
+        "commander": "^8.3.0"
+    }
+}
