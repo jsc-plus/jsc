@@ -17,8 +17,8 @@
 		AC4529D62791237E007ACCCF /* jsc_variant.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D42791237E007ACCCF /* jsc_variant.c */; };
 		AC4529D72791237E007ACCCF /* jsc_variant.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D42791237E007ACCCF /* jsc_variant.c */; };
 		AC4529DA2791276A007ACCCF /* jsc_Array.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4529D82791276A007ACCCF /* jsc_Array.h */; };
-		AC4529DB2791276A007ACCCF /* jsc_Array.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.c */; };
-		AC4529DC2791276A007ACCCF /* jsc_Array.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.c */; };
+		AC4529DB2791276A007ACCCF /* jsc_Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.cc */; };
+		AC4529DC2791276A007ACCCF /* jsc_Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.cc */; };
 		AC4529DF27951236007ACCCF /* jsc_String.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4529DD27951236007ACCCF /* jsc_String.h */; };
 		AC4529E027951236007ACCCF /* jsc_String.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529DE27951236007ACCCF /* jsc_String.c */; };
 		AC4529E127951236007ACCCF /* jsc_String.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529DE27951236007ACCCF /* jsc_String.c */; };
@@ -29,15 +29,21 @@
 		AC97D10E2820DEC700D610A7 /* jsc_Number.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D10C2820DEC700D610A7 /* jsc_Number.h */; };
 		AC97D10F2820DEC700D610A7 /* jsc_Number.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D10D2820DEC700D610A7 /* jsc_Number.c */; };
 		AC97D1102820E1E700D610A7 /* jsc_Number.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D10D2820DEC700D610A7 /* jsc_Number.c */; };
-		AC97D1132820E7EF00D610A7 /* jsc_Map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1112820E7EF00D610A7 /* jsc_Map.cpp */; };
+		AC97D1132820E7EF00D610A7 /* jsc_Map.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1112820E7EF00D610A7 /* jsc_Map.cc */; };
 		AC97D1142820E7EF00D610A7 /* jsc_Map.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1122820E7EF00D610A7 /* jsc_Map.h */; };
-		AC97D1152820ED0500D610A7 /* jsc_Map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1112820E7EF00D610A7 /* jsc_Map.cpp */; };
+		AC97D1152820ED0500D610A7 /* jsc_Map.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1112820E7EF00D610A7 /* jsc_Map.cc */; };
 		AC97D1182820FBF500D610A7 /* jsc_Iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1162820FBF500D610A7 /* jsc_Iterator.h */; };
 		AC97D1192820FBF600D610A7 /* jsc_Iterator.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1172820FBF500D610A7 /* jsc_Iterator.c */; };
 		AC97D11A2820FBFF00D610A7 /* jsc_Iterator.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1172820FBF500D610A7 /* jsc_Iterator.c */; };
-		AC97D11D28210B4C00D610A7 /* jsc_Set.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC97D11B28210B4C00D610A7 /* jsc_Set.cpp */; };
+		AC97D11D28210B4C00D610A7 /* jsc_Set.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D11B28210B4C00D610A7 /* jsc_Set.cc */; };
 		AC97D11E28210B4C00D610A7 /* jsc_Set.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D11C28210B4C00D610A7 /* jsc_Set.h */; };
-		AC97D11F28210B4E00D610A7 /* jsc_Set.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC97D11B28210B4C00D610A7 /* jsc_Set.cpp */; };
+		AC97D11F28210B4E00D610A7 /* jsc_Set.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D11B28210B4C00D610A7 /* jsc_Set.cc */; };
+		AC97D1222822002500D610A7 /* jsc_ArrayBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1202822002500D610A7 /* jsc_ArrayBuffer.h */; };
+		AC97D1232822002500D610A7 /* jsc_ArrayBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */; };
+		AC97D1242822002500D610A7 /* jsc_ArrayBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */; };
+		AC97D127282203CE00D610A7 /* jsc_DataView.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D125282203CE00D610A7 /* jsc_DataView.h */; };
+		AC97D128282203CE00D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
+		AC97D129282203CE00D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,7 +69,7 @@
 		AC4529D32791237E007ACCCF /* jsc_variant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_variant.h; sourceTree = "<group>"; };
 		AC4529D42791237E007ACCCF /* jsc_variant.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_variant.c; sourceTree = "<group>"; };
 		AC4529D82791276A007ACCCF /* jsc_Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Array.h; sourceTree = "<group>"; };
-		AC4529D92791276A007ACCCF /* jsc_Array.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_Array.c; sourceTree = "<group>"; };
+		AC4529D92791276A007ACCCF /* jsc_Array.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jsc_Array.cc; sourceTree = "<group>"; };
 		AC4529DD27951236007ACCCF /* jsc_String.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_String.h; sourceTree = "<group>"; };
 		AC4529DE27951236007ACCCF /* jsc_String.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_String.c; sourceTree = "<group>"; };
 		AC4529E22796BB61007ACCCF /* jsc_buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_buffer.h; sourceTree = "<group>"; };
@@ -71,12 +77,17 @@
 		AC97D10A2820CF8D00D610A7 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
 		AC97D10C2820DEC700D610A7 /* jsc_Number.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Number.h; sourceTree = "<group>"; };
 		AC97D10D2820DEC700D610A7 /* jsc_Number.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_Number.c; sourceTree = "<group>"; };
-		AC97D1112820E7EF00D610A7 /* jsc_Map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jsc_Map.cpp; sourceTree = "<group>"; };
+		AC97D1112820E7EF00D610A7 /* jsc_Map.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jsc_Map.cc; sourceTree = "<group>"; };
 		AC97D1122820E7EF00D610A7 /* jsc_Map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Map.h; sourceTree = "<group>"; };
 		AC97D1162820FBF500D610A7 /* jsc_Iterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Iterator.h; sourceTree = "<group>"; };
 		AC97D1172820FBF500D610A7 /* jsc_Iterator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_Iterator.c; sourceTree = "<group>"; };
-		AC97D11B28210B4C00D610A7 /* jsc_Set.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jsc_Set.cpp; sourceTree = "<group>"; };
+		AC97D11B28210B4C00D610A7 /* jsc_Set.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jsc_Set.cc; sourceTree = "<group>"; };
 		AC97D11C28210B4C00D610A7 /* jsc_Set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Set.h; sourceTree = "<group>"; };
+		AC97D1202822002500D610A7 /* jsc_ArrayBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_ArrayBuffer.h; sourceTree = "<group>"; };
+		AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_ArrayBuffer.c; sourceTree = "<group>"; };
+		AC97D125282203CE00D610A7 /* jsc_DataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_DataView.h; sourceTree = "<group>"; };
+		AC97D126282203CE00D610A7 /* jsc_DataView.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_DataView.c; sourceTree = "<group>"; };
+		AC97D12A282271E500D610A7 /* jsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +146,7 @@
 				AC4529D32791237E007ACCCF /* jsc_variant.h */,
 				AC4529D42791237E007ACCCF /* jsc_variant.c */,
 				AC4529D82791276A007ACCCF /* jsc_Array.h */,
-				AC4529D92791276A007ACCCF /* jsc_Array.c */,
+				AC4529D92791276A007ACCCF /* jsc_Array.cc */,
 				AC4529DD27951236007ACCCF /* jsc_String.h */,
 				AC4529DE27951236007ACCCF /* jsc_String.c */,
 				AC97D10C2820DEC700D610A7 /* jsc_Number.h */,
@@ -143,11 +154,16 @@
 				AC4529E22796BB61007ACCCF /* jsc_buffer.h */,
 				AC4529E32796BB61007ACCCF /* jsc_buffer.c */,
 				AC97D1122820E7EF00D610A7 /* jsc_Map.h */,
-				AC97D1112820E7EF00D610A7 /* jsc_Map.cpp */,
+				AC97D1112820E7EF00D610A7 /* jsc_Map.cc */,
 				AC97D1162820FBF500D610A7 /* jsc_Iterator.h */,
 				AC97D1172820FBF500D610A7 /* jsc_Iterator.c */,
 				AC97D11C28210B4C00D610A7 /* jsc_Set.h */,
-				AC97D11B28210B4C00D610A7 /* jsc_Set.cpp */,
+				AC97D11B28210B4C00D610A7 /* jsc_Set.cc */,
+				AC97D1202822002500D610A7 /* jsc_ArrayBuffer.h */,
+				AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */,
+				AC97D125282203CE00D610A7 /* jsc_DataView.h */,
+				AC97D126282203CE00D610A7 /* jsc_DataView.c */,
+				AC97D12A282271E500D610A7 /* jsc.h */,
 			);
 			name = src;
 			path = ../../../../src;
@@ -179,6 +195,8 @@
 				AC97D1142820E7EF00D610A7 /* jsc_Map.h in Headers */,
 				AC4529DF27951236007ACCCF /* jsc_String.h in Headers */,
 				AC4529DA2791276A007ACCCF /* jsc_Array.h in Headers */,
+				AC97D1222822002500D610A7 /* jsc_ArrayBuffer.h in Headers */,
+				AC97D127282203CE00D610A7 /* jsc_DataView.h in Headers */,
 				AC4529E42796BB61007ACCCF /* jsc_buffer.h in Headers */,
 				AC4529BF278E733D007ACCCF /* jsc_class.h in Headers */,
 				AC97D1182820FBF500D610A7 /* jsc_Iterator.h in Headers */,
@@ -280,13 +298,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC4529E52796BB61007ACCCF /* jsc_buffer.c in Sources */,
-				AC97D1132820E7EF00D610A7 /* jsc_Map.cpp in Sources */,
+				AC97D1132820E7EF00D610A7 /* jsc_Map.cc in Sources */,
 				AC4529C0278E733D007ACCCF /* jsc_class.c in Sources */,
+				AC97D1232822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
 				AC4529D62791237E007ACCCF /* jsc_variant.c in Sources */,
-				AC4529DB2791276A007ACCCF /* jsc_Array.c in Sources */,
+				AC4529DB2791276A007ACCCF /* jsc_Array.cc in Sources */,
 				AC97D10F2820DEC700D610A7 /* jsc_Number.c in Sources */,
+				AC97D128282203CE00D610A7 /* jsc_DataView.c in Sources */,
 				AC97D1192820FBF600D610A7 /* jsc_Iterator.c in Sources */,
-				AC97D11D28210B4C00D610A7 /* jsc_Set.cpp in Sources */,
+				AC97D11D28210B4C00D610A7 /* jsc_Set.cc in Sources */,
 				AC4529CE278E7700007ACCCF /* jsc_log.c in Sources */,
 				AC4529E027951236007ACCCF /* jsc_String.c in Sources */,
 			);
@@ -296,14 +316,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC4529DC2791276A007ACCCF /* jsc_Array.c in Sources */,
+				AC4529DC2791276A007ACCCF /* jsc_Array.cc in Sources */,
 				AC4529E127951236007ACCCF /* jsc_String.c in Sources */,
 				AC97D11A2820FBFF00D610A7 /* jsc_Iterator.c in Sources */,
 				AC4529E62796BB61007ACCCF /* jsc_buffer.c in Sources */,
 				AC4529C8278E7522007ACCCF /* main.c in Sources */,
 				AC4529CC278E7543007ACCCF /* jsc_class.c in Sources */,
-				AC97D1152820ED0500D610A7 /* jsc_Map.cpp in Sources */,
-				AC97D11F28210B4E00D610A7 /* jsc_Set.cpp in Sources */,
+				AC97D1242822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
+				AC97D129282203CE00D610A7 /* jsc_DataView.c in Sources */,
+				AC97D1152820ED0500D610A7 /* jsc_Map.cc in Sources */,
+				AC97D11F28210B4E00D610A7 /* jsc_Set.cc in Sources */,
 				AC97D1102820E1E700D610A7 /* jsc_Number.c in Sources */,
 				AC4529D72791237E007ACCCF /* jsc_variant.c in Sources */,
 				AC4529D2278E776B007ACCCF /* jsc_log.c in Sources */,

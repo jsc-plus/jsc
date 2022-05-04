@@ -312,3 +312,9 @@ void jsc_variant_setStrong(struct jsc_variant_t * a,struct jsc_variant_t v) {
     jsc_setStrong(&a->objectValue, v.objectValue);
 }
 
+struct jsc_variant_t jsc_variant_getStrong(struct jsc_variant_t v) {
+    struct jsc_variant_t r = jsc_Nil;
+    jsc_variant_setStrong(&r,v);
+    return r;
+}
+

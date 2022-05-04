@@ -135,10 +135,12 @@ extern "C" {
      * b
      */
     typedef char jsc_byte_t;
+    typedef char jsc_int8_t;
     /**
      * B
      */
     typedef unsigned char jsc_ubyte_t;
+    typedef char jsc_uint8_t;
     
     /**
      * v

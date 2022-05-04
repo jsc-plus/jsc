@@ -16,6 +16,8 @@
 #include "jsc_Map.h"
 #include "jsc_Set.h"
 #include "jsc_Iterator.h"
+#include "jsc_ArrayBuffer.h"
+#include "jsc_DataView.h"
 #include <pthread.h>
 
 static void * test1(void * data) {
@@ -65,6 +67,44 @@ static void * test1(void * data) {
             jsc_log("value: %s",e->value.stringValue);
             
         }
+        
+        jsc_autorelease_pool_end();
+    }
+    
+    {
+        // array
+        jsc_autorelease_pool_begin();
+        
+        jsc_object_t * m = jsc_object_new((jsc_class_t *) &jsc_Array, 0);
+        
+        jsc_Array_push(m, jsc_variant_CString("v1"));
+        jsc_Array_push(m, jsc_variant_CString("v2"));
+        jsc_Array_push(m, jsc_variant_CString("v3"));
+        
+        jsc_object_t * i = (jsc_object_t *) jsc_Array_iterator(m);
+        
+        const struct jsc_IteratorEntity_t * e;
+        
+        while(i && (e = jsc_Iterator_next(i))) {
+            
+            jsc_log("value: %s",e->value.stringValue);
+            
+        }
+        
+        jsc_autorelease_pool_end();
+    }
+    
+    {
+        // arraybuffer
+        jsc_autorelease_pool_begin();
+        
+        jsc_ArrayBuffer_t * buffer = jsc_ArrayBuffer_new(2048);
+        jsc_DataView_t * view = jsc_DataView_new(buffer, 0, 0);
+        
+        jsc_DataView_setUint32((jsc_object_t *) view, 0, 0x01020304, 1);
+        jsc_DataView_setUint32((jsc_object_t *) view, 4, 0x01020304, 0);
+        
+        jsc_log("%s",jsc_String_CString((jsc_object_t *) jsc_object_toString((jsc_object_t *) buffer)));
         
         jsc_autorelease_pool_end();
     }

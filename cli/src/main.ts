@@ -1,11 +1,12 @@
 
 import commander from 'commander';
+import * as C from "./C/parse"
 
-commander.program.command('java <inDir> <outDir> <package>')
+commander.program.command('gen-c <inFile> <outDir> <moduleName>')
         .description('quick generate pb java')
-        .usage("java <inDir> <outDir> <package>")
-        .action(function (inDir: string, outDir: string, packageName: string) {
-
+        .usage("gen-c <inFile> <outDir> <moduleName>")
+        .action(function (inFile: string, outDir: string, moduleName: string) {
+                C.parse(inFile, outDir, moduleName)
         });
 
 

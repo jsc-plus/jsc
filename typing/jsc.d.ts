@@ -96,6 +96,11 @@ declare namespace jsc {
      */
     type ubyte = number
 
+    /**
+     * 弱引用
+     */
+    type weak = any
+
     class Class {
         readonly isa?: Class
         readonly name: string
@@ -107,8 +112,14 @@ declare namespace jsc {
         readonly isa: Class
         readonly retainCount: int
         isKindOf(isa?: Class): boolean
+        toString(): string
+        hashCode(): ulong
+        compare(b: Object): long
+        toInt64(): int64
+        toFloat64(): float64
+        toBoolean(): boolean
     }
 
     function log(format: string, ...args: any[]): void
-    
+
 }

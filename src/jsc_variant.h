@@ -106,6 +106,7 @@ extern "C" {
     jsc_ulong_t jsc_variant_hashCode(struct jsc_variant_t a);
     struct jsc_object_t * jsc_variant_toObject(struct jsc_variant_t v);
     void jsc_variant_setStrong(struct jsc_variant_t * a,struct jsc_variant_t v);
+    struct jsc_variant_t jsc_variant_getStrong(struct jsc_variant_t v);
 
 #ifdef __cplusplus
 }
