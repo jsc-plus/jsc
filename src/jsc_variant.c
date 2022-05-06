@@ -17,14 +17,14 @@
 jsc_variant_t const jsc_Nil = {JSC_VARIANT_TYPE_NIL,0,0};
 
 
-jsc_string_t jsc_variant_toCString(struct jsc_variant_t v,struct jsc_buffer_t * buf) {
+jsc_string_t jsc_variant_toCStringWithBuffer(struct jsc_variant_t v,struct jsc_buffer_t * buf) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
             return NULL;
-        case JSC_VARIANT_TYPE_BYTE:
-            return jsc_buffer_format(buf,"%d", v.byteValue);
-        case JSC_VARIANT_TYPE_UBYTE:
-            return jsc_buffer_format(buf,"%u", v.ubyteValue);
+        case JSC_VARIANT_TYPE_INT8:
+            return jsc_buffer_format(buf,"%d", v.int8Value);
+        case JSC_VARIANT_TYPE_UINT8:
+            return jsc_buffer_format(buf,"%u", v.uint8Value);
         case JSC_VARIANT_TYPE_INT16:
             return jsc_buffer_format(buf,"%d", v.int16Value);
         case JSC_VARIANT_TYPE_UINT16:
@@ -45,10 +45,6 @@ jsc_string_t jsc_variant_toCString(struct jsc_variant_t v,struct jsc_buffer_t * 
             return jsc_buffer_format(buf,"%ld", v.longValue);
         case JSC_VARIANT_TYPE_ULONG:
             return jsc_buffer_format(buf,"%lu", v.ulongValue);
-        case JSC_VARIANT_TYPE_FLOAT:
-            return jsc_buffer_format(buf,"%g", v.floatValue);
-        case JSC_VARIANT_TYPE_DOUBLE:
-            return jsc_buffer_format(buf,"%g", v.doubleValue);
         case JSC_VARIANT_TYPE_FLOAT32:
             return jsc_buffer_format(buf,"%g", v.float32Value);
         case JSC_VARIANT_TYPE_FLOAT64:
@@ -70,11 +66,138 @@ jsc_string_t jsc_variant_toCString(struct jsc_variant_t v,struct jsc_buffer_t * 
     return NULL;
 }
 
+jsc_string_t jsc_variant_toCString(struct jsc_variant_t v) {
+    switch (v.type) {
+        case JSC_VARIANT_TYPE_NIL:
+            return NULL;
+        case JSC_VARIANT_TYPE_INT8:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%d",v.int8Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UINT8:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%u",v.uint8Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_INT16:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%d",v.int16Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UINT16:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%u",v.uint16Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_INT32:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%d",v.int32Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UINT32:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%u",v.uint32Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_INT64:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%lld",v.int64Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UINT64:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%llu",v.uint64Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_INT:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%d",v.intValue);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UINT:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%u",v.uintValue);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_LONG:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%ld",v.longValue);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_ULONG:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%lu",v.ulongValue);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_FLOAT32:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%g",v.float32Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_FLOAT64:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"%g",v.float64Value);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_BOOLEAN:
+            if(v.objectValue) {
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(v.booleanValue ? "true":"false");
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_UNICHAR:
+            if(v.objectValue) {
+                char s[64];
+                snprintf(s,sizeof(s),"0x%04X",v.unicharValue);
+                v.objectValue = (jsc_object_t *) jsc_String_newCString(s);
+            }
+            return jsc_String_CString(v.objectValue);
+        case JSC_VARIANT_TYPE_STRING:
+            return v.stringValue;
+        case JSC_VARIANT_TYPE_OBJECT:
+        {
+            jsc_String_t * s = jsc_object_toString(v.objectValue);
+            if(s != NULL) {
+                return jsc_String_CString((jsc_object_t *) s);
+            }
+        }
+    }
+    return NULL;
+}
+
 jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -89,10 +212,8 @@ jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v) {
             return (jsc_float64_t) v.int64Value;
         case JSC_VARIANT_TYPE_UINT64:
             return (jsc_float64_t) v.uint64Value;
-        case JSC_VARIANT_TYPE_FLOAT:
         case JSC_VARIANT_TYPE_FLOAT32:
             return (jsc_float64_t) v.float32Value;
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT64:
             return (jsc_float64_t) v.float64Value;
         case JSC_VARIANT_TYPE_STRING:
@@ -106,8 +227,8 @@ jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v) {
 jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -122,10 +243,8 @@ jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v) {
             return v.int64Value;
         case JSC_VARIANT_TYPE_UINT64:
             return (jsc_int64_t) v.uint64Value;
-        case JSC_VARIANT_TYPE_FLOAT:
         case JSC_VARIANT_TYPE_FLOAT32:
             return (jsc_int64_t) v.float32Value;
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT64:
             return (jsc_int64_t) v.float64Value;
         case JSC_VARIANT_TYPE_STRING:
@@ -139,8 +258,8 @@ jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v) {
 jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -155,10 +274,8 @@ jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v) {
             return v.int64Value ? 1 : 0;
         case JSC_VARIANT_TYPE_UINT64:
             return v.uint64Value ? 1 : 0;
-        case JSC_VARIANT_TYPE_FLOAT:
         case JSC_VARIANT_TYPE_FLOAT32:
             return v.float32Value ? 1 : 0;
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT64:
             return v.float64Value ? 1 : 0;
         case JSC_VARIANT_TYPE_STRING:
@@ -172,8 +289,8 @@ jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v) {
 inline static jsc_variant_type_t getCompareType(const struct jsc_variant_t * v) {
     switch (v->type) {
         case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -187,8 +304,6 @@ inline static jsc_variant_type_t getCompareType(const struct jsc_variant_t * v) 
         case JSC_VARIANT_TYPE_UNICHAR:
         case JSC_VARIANT_TYPE_UINT64:
             return JSC_VARIANT_TYPE_INT64;
-        case JSC_VARIANT_TYPE_FLOAT:
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT32:
         case JSC_VARIANT_TYPE_FLOAT64:
             return JSC_VARIANT_TYPE_FLOAT64;
@@ -210,9 +325,9 @@ jsc_long_t jsc_variant_compare(struct jsc_variant_t a,struct jsc_variant_t b) {
     } else if(at == JSC_VARIANT_TYPE_STRING || bt == JSC_VARIANT_TYPE_STRING) {
         jsc_buffer_t buf;
         jsc_buffer_init(&buf);
-        jsc_string_t as = jsc_variant_toCString(a, &buf);
+        jsc_string_t as = jsc_variant_toCStringWithBuffer(a, &buf);
         buf.length ++;
-        jsc_string_t bs = jsc_variant_toCString(b, &buf);
+        jsc_string_t bs = jsc_variant_toCStringWithBuffer(b, &buf);
         buf.length ++;
         jsc_long_t r = jsc_string_compare(as,bs);
         jsc_buffer_destory(&buf);
@@ -243,8 +358,8 @@ jsc_ulong_t jsc_variant_hashCode(struct jsc_variant_t v) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
             return 0;
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -255,8 +370,6 @@ jsc_ulong_t jsc_variant_hashCode(struct jsc_variant_t v) {
         case JSC_VARIANT_TYPE_UINT:
         case JSC_VARIANT_TYPE_LONG:
         case JSC_VARIANT_TYPE_ULONG:
-        case JSC_VARIANT_TYPE_FLOAT:
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT32:
         case JSC_VARIANT_TYPE_FLOAT64:
         case JSC_VARIANT_TYPE_BOOLEAN:
@@ -273,8 +386,8 @@ jsc_ulong_t jsc_variant_hashCode(struct jsc_variant_t v) {
 struct jsc_object_t * jsc_variant_toObject(struct jsc_variant_t v) {
     switch (v.type) {
         case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_BYTE:
-        case JSC_VARIANT_TYPE_UBYTE:
+        case JSC_VARIANT_TYPE_INT8:
+        case JSC_VARIANT_TYPE_UINT8:
         case JSC_VARIANT_TYPE_INT16:
         case JSC_VARIANT_TYPE_UINT16:
         case JSC_VARIANT_TYPE_INT32:
@@ -285,8 +398,6 @@ struct jsc_object_t * jsc_variant_toObject(struct jsc_variant_t v) {
         case JSC_VARIANT_TYPE_UINT:
         case JSC_VARIANT_TYPE_LONG:
         case JSC_VARIANT_TYPE_ULONG:
-        case JSC_VARIANT_TYPE_FLOAT:
-        case JSC_VARIANT_TYPE_DOUBLE:
         case JSC_VARIANT_TYPE_FLOAT32:
         case JSC_VARIANT_TYPE_FLOAT64:
         case JSC_VARIANT_TYPE_BOOLEAN:

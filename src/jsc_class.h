@@ -60,9 +60,9 @@ extern "C" {
     
     void jsc_object_unWeak(jsc_object_t * v, jsc_object_t ** dst);
 
-    void jsc_setStrong(jsc_object_t ** dst, jsc_object_t * src);
+    jsc_object_t * jsc_setStrong(jsc_object_t ** dst, jsc_object_t * src);
     
-    void jsc_setWeak(jsc_object_t ** dst, jsc_object_t * src);
+    jsc_object_t * jsc_setWeak(jsc_object_t ** dst, jsc_object_t * src);
     
     jsc_boolean_t jsc_class_isKind(jsc_class_t * isa, jsc_class_t * dst);
 

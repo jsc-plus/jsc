@@ -1,0 +1,52 @@
+{
+  "vars": {
+    "crypto_[object Object]": {
+      "name": {
+        "name": "UTF8",
+        "module": {
+          "name": "crypto"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 20,
+        "CString": true,
+        "var": true
+      },
+      "initializer": "NULL",
+      "title": "",
+      "tags": []
+    }
+  },
+  "functions": {
+    "crypto_[object Object]": {
+      "name": {
+        "name": "decodeString",
+        "module": {
+          "name": "crypto"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 20
+      },
+      "arguments": [
+        {
+          "name": "data",
+          "type": {
+            "kind": 3
+          }
+        },
+        {
+          "name": "charset",
+          "type": {
+            "kind": 20
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    }
+  },
+  "classes": {}
+}

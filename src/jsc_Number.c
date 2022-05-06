@@ -52,7 +52,7 @@ static struct jsc_String_t * _jsc_Number_toString(struct jsc_class_t * isa, stru
     if(v->value.objectValue == NULL) {
         jsc_buffer_t buf;
         jsc_buffer_init(&buf);
-        jsc_string_t s = jsc_variant_toCString(v->value, &buf);
+        jsc_string_t s = jsc_variant_toCStringWithBuffer(v->value, &buf);
         v->value.objectValue = (jsc_object_t *) jsc_String_allocCString(s);
         jsc_buffer_destory(&buf);
     }

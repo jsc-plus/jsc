@@ -18,8 +18,8 @@ extern "C" {
 
     enum {
         JSC_VARIANT_TYPE_NIL,
-        JSC_VARIANT_TYPE_BYTE,
-        JSC_VARIANT_TYPE_UBYTE,
+        JSC_VARIANT_TYPE_INT8,
+        JSC_VARIANT_TYPE_UINT8,
         JSC_VARIANT_TYPE_INT16,
         JSC_VARIANT_TYPE_UINT16,
         JSC_VARIANT_TYPE_INT32,
@@ -30,8 +30,6 @@ extern "C" {
         JSC_VARIANT_TYPE_UINT,
         JSC_VARIANT_TYPE_LONG,
         JSC_VARIANT_TYPE_ULONG,
-        JSC_VARIANT_TYPE_FLOAT,
-        JSC_VARIANT_TYPE_DOUBLE,
         JSC_VARIANT_TYPE_FLOAT32,
         JSC_VARIANT_TYPE_FLOAT64,
         JSC_VARIANT_TYPE_BOOLEAN,
@@ -45,8 +43,8 @@ extern "C" {
     typedef struct jsc_variant_t {
         jsc_variant_type_t type;
         union {
-            jsc_byte_t byteValue;
-            jsc_ubyte_t ubyteValue;
+            jsc_byte_t int8Value;
+            jsc_ubyte_t uint8Value;
             jsc_int16_t int16Value;
             jsc_uint16_t uint16Value;
             jsc_int32_t int32Value;
@@ -57,8 +55,6 @@ extern "C" {
             jsc_uint_t uintValue;
             jsc_long_t longValue;
             jsc_ulong_t ulongValue;
-            jsc_float_t floatValue;
-            jsc_double_t doubleValue;
             jsc_float32_t float32Value;
             jsc_float64_t float64Value;
             jsc_boolean_t booleanValue;
@@ -98,7 +94,8 @@ extern "C" {
         return v;
     }
 
-    jsc_string_t jsc_variant_toCString(struct jsc_variant_t v,struct jsc_buffer_t * buf);
+    jsc_string_t jsc_variant_toCStringWithBuffer(struct jsc_variant_t v,struct jsc_buffer_t * buf);
+    jsc_string_t jsc_variant_toCString(struct jsc_variant_t v);
     jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v);
     jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v);
     jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v);

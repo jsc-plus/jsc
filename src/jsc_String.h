@@ -87,14 +87,20 @@ extern "C" {
     struct jsc_String_t * jsc_String_allocConstCString(jsc_string_t s);
     struct jsc_String_t * jsc_String_allocUTF8String(jsc_string_t s,jsc_int_t length);
     struct jsc_String_t * jsc_String_allocUString(jsc_unichar_t * s, jsc_int_t length);
+    struct jsc_String_t * jsc_String_allocFormat(jsc_string_t format,...);
     struct jsc_String_t * jsc_String_newCString(jsc_string_t s);
     struct jsc_String_t * jsc_String_newConstCString(jsc_string_t s);
     struct jsc_String_t * jsc_String_newUTF8String(jsc_string_t s,jsc_int_t length);
     struct jsc_String_t * jsc_String_newUString(jsc_unichar_t * s, jsc_int_t length);
+    struct jsc_String_t * jsc_String_newFormat(jsc_string_t format,...);
 
     size_t jsc_String_iconv(jsc_string_t toCharset,jsc_string_t fromCharset, jsc_byte_t * inBytes,size_t inLen,struct jsc_buffer_t * dst);
     
     jsc_long_t jsc_string_compare(jsc_string_t a,jsc_string_t b);
+    
+    struct jsc_String_t * jsc_string_concat(jsc_string_t a,jsc_string_t b);
+
+    
 
 #ifdef __cplusplus
 }

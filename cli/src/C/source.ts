@@ -1,9 +1,10 @@
-import { ObjectClass } from "./base";
-import { Doc, Module, Symbol, Function, Type, Argument, ModuleName, Method, Class } from "./types"
+import { baseClassSet } from "./base";
+import { Doc, Module, Symbol, Function, Type, Argument, ModuleName, Method, Class, TypeKind } from "./types"
 
 export interface Source {
-    included: string;
-    implemented: String
+    include_h: string;
+    include_c: string;
+    implemented: string;
 }
 
 
@@ -56,6 +57,16 @@ export function toSymbolModule(s: ModuleName): string {
     return vs.join('')
 }
 
+export function toSymbolModulePath(s: ModuleName): string {
+    let vs: string[] = []
+    if (s.dirs) {
+        vs.push(s.dirs.join('/'))
+        vs.push('/')
+    }
+    vs.push(s.name)
+    return vs.join('')
+}
+
 export function toSymbolName(s: Symbol): string {
     let vs: string[] = []
     if (s.module && s.export) {
@@ -70,94 +81,111 @@ export function toSymbolName(s: Symbol): string {
     return vs.join('')
 }
 
-export function toInclude(s: Symbol): string {
-    return `#include "${toSymbolPath(s)}.h"\n`
+export function toInclude(s: Symbol, exname: string = 'h'): string {
+    return `#include "${toSymbolPath(s)}.${exname}"\n`
+}
+
+export function toFunctionType(func: Function, name: string = ""): string {
+    let vs: string[] = [];
+    vs.push(`${toType(func.returnType)} (*${name})(`)
+    for (let i = 0; i < func.arguments.length; i++) {
+        if (i != 0) {
+            vs.push(',')
+        }
+        vs.push(`${toType(func.arguments[i].type)}`)
+    }
+    vs.push(')')
+    return vs.join('')
 }
 
 export function toType(t: Type): string {
-    switch (t) {
-        case Type.INT8:
+    switch (t.kind) {
+        case TypeKind.INT8:
             return "jsc_int8_t";
-        case Type.UINT8:
+        case TypeKind.UINT8:
             return "jsc_uint8_t";
-        case Type.INT16:
+        case TypeKind.INT16:
             return "jsc_int16_t";
-        case Type.UINT16:
+        case TypeKind.UINT16:
             return "jsc_uint16_t";
-        case Type.INT32:
+        case TypeKind.INT32:
             return "jsc_int32_t";
-        case Type.UINT32:
+        case TypeKind.UINT32:
             return "jsc_uint32_t";
-        case Type.INT64:
+        case TypeKind.INT64:
             return "jsc_int64_t";
-        case Type.UINT64:
+        case TypeKind.UINT64:
             return "jsc_uint64_t";
-        case Type.INT:
+        case TypeKind.INT:
             return "jsc_int_t";
-        case Type.UINT:
+        case TypeKind.UINT:
             return "jsc_uint_t";
-        case Type.LONG:
+        case TypeKind.LONG:
             return "jsc_long_t";
-        case Type.ULONG:
+        case TypeKind.ULONG:
             return "jsc_ulong_t";
-        case Type.FLOAT:
-            return "jsc_float_t";
-        case Type.DOUBLE:
-            return "jsc_double_t";
-        case Type.FLOAT32:
+        case TypeKind.FLOAT32:
             return "jsc_float32_t";
-        case Type.FLOAT64:
-            return "jsc_float64t";
-        case Type.BOOLEAN:
+        case TypeKind.FLOAT64:
+            return "jsc_float64_t";
+        case TypeKind.BOOLEAN:
             return "jsc_boolean_t";
-        case Type.UNICHAR:
+        case TypeKind.UNICHAR:
             return "jsc_unichar_t";
-        case Type.STRING:
+        case TypeKind.STRING:
             return "jsc_string_t";
-        case Type.OBJECT:
+        case TypeKind.OBJECT:
             return "jsc_object_t *";
-        case Type.VARIANT:
+        case TypeKind.VARIANT:
             return "jsc_variant_t";
+        case TypeKind.PTR:
+            if (t.func) {
+                return toFunctionType(t.func)
+            }
+            return "jsc_ptr_t";
     }
     return "void"
 }
 
 export function toTypeDefaultValue(t: Type): string {
-    switch (t) {
-        case Type.INT8:
-        case Type.UINT8:
-        case Type.INT16:
-        case Type.UINT16:
-        case Type.INT32:
-        case Type.UINT32:
-        case Type.INT64:
-        case Type.UINT64:
-        case Type.INT:
-        case Type.UINT:
-        case Type.LONG:
-        case Type.ULONG:
-        case Type.FLOAT:
-        case Type.DOUBLE:
-        case Type.FLOAT32:
-        case Type.FLOAT64:
-        case Type.BOOLEAN:
-        case Type.UNICHAR:
+    switch (t.kind) {
+        case TypeKind.INT8:
+        case TypeKind.UINT8:
+        case TypeKind.INT16:
+        case TypeKind.UINT16:
+        case TypeKind.INT32:
+        case TypeKind.UINT32:
+        case TypeKind.INT64:
+        case TypeKind.UINT64:
+        case TypeKind.INT:
+        case TypeKind.UINT:
+        case TypeKind.LONG:
+        case TypeKind.ULONG:
+        case TypeKind.FLOAT32:
+        case TypeKind.FLOAT64:
+        case TypeKind.BOOLEAN:
+        case TypeKind.UNICHAR:
             return "0";
-        case Type.STRING:
+        case TypeKind.STRING:
             return "NULL";
-        case Type.OBJECT:
+        case TypeKind.OBJECT:
             return "NULL";
-        case Type.VARIANT:
+        case TypeKind.VARIANT:
             return "jsc_Nil";
+        case TypeKind.PTR:
+            return "NULL";
     }
     return ""
 }
 
-export function toArgumentsDefinition(args: Argument[]): string {
-    let vs: string[] = [''];
+export function toArgumentsDefinition(args: Argument[], vs: string[] = ['']): string {
     if (args.length > 0) {
         for (let a of args) {
-            vs.push(`${toType(a.type)} ${a.name}`)
+            if (a.type.kind == TypeKind.PTR && a.type.func) {
+                vs.push(toFunctionType(a.type.func, a.name))
+            } else {
+                vs.push(`${toType(a.type)} ${a.name}`)
+            }
         }
     }
     return vs.join(', ')
@@ -180,7 +208,11 @@ export function toFunctionDefinition(v: Function): string {
     vs.push(" jsc_")
     vs.push(toSymbolName(v.name))
     vs.push("(");
-    vs.push(toArgumentsDefinition(v.arguments));
+    if (v.arguments.length == 0) {
+        vs.push('void')
+    } else {
+        vs.push(toArgumentsDefinition(v.arguments, []));
+    }
     vs.push(");\n");
     return vs.join('')
 }
@@ -194,8 +226,13 @@ export function toFunctionImplemented(v: Function): string {
     vs.push(" jsc_")
     vs.push(toSymbolName(v.name))
     vs.push("(");
-    vs.push(toArgumentsDefinition(v.arguments));
+    vs.push(toArgumentsDefinition(v.arguments, []));
     vs.push(") {\n");
+    if (v.body) {
+        vs.push(v.body(1))
+    } else if (v.returnType.kind != TypeKind.VOID) {
+        vs.push(`\treturn ${toTypeDefaultValue(v.returnType)};\n`)
+    }
     vs.push("}\n");
     return vs.join('')
 }
@@ -214,6 +251,9 @@ export function toMethodTypeDefinition(isa: Class, v: Method, level: number = 0)
 export function toMethodClassDefinition(isa: Class, v: Method, level: number = 0): string {
     let vs: string[] = []
     vs.push("\t".repeat(level));
+    if (!isa.name.export) {
+        vs.push('static ')
+    }
     vs.push(`${toType(v.returnType)} jsc_${toSymbolName(isa.name)}_${v.name.name}_(jsc_class_t * __isa,jsc_object_t * __object${toArgumentsDefinition(v.arguments)});\n`)
     return vs.join('')
 }
@@ -221,6 +261,9 @@ export function toMethodClassDefinition(isa: Class, v: Method, level: number = 0
 export function toMethodDefinition(isa: Class, v: Method, level: number = 0): string {
     let vs: string[] = []
     vs.push("\t".repeat(level));
+    if (!isa.name.export) {
+        vs.push('static ')
+    }
     vs.push(`${toType(v.returnType)} jsc_${toSymbolName(isa.name)}_${v.name.name}(jsc_object_t * __object${toArgumentsDefinition(v.arguments)});\n`)
     return vs.join('')
 }
@@ -241,7 +284,7 @@ export function toClassInstanceDefinition(isa: Class, level: number = 0): string
     vs.push(`${"\t".repeat(level)}typedef struct ${toSymbolName(isa.name)}_t {\n`)
     vs.push(`${"\t".repeat(level + 1)}jsc_${isa.base ? toSymbolName(isa.base.name) : "object"}_t base;\n`)
     for (let p of isa.properties) {
-        vs.push(`${"\t".repeat(level + 1)}${toType(p.type)} ${p.name.name};\n`)
+        vs.push(`${"\t".repeat(level + 1)}${toType(p.type.kind == TypeKind.STRING ? { kind: TypeKind.OBJECT } : p.type)} ${p.name.name};\n`)
     }
     vs.push(`${"\t".repeat(level)}} jsc_${toSymbolName(isa.name)}_t;\n`)
     return vs.join('')
@@ -276,7 +319,7 @@ export function toClassConst(isa: Class, base?: Class): string {
 
         vs.push(`{(jsc_class_t *)&jsc_${isa.base ? toSymbolName(isa.base.name) : 'Object'},sizeof(jsc_${name}_t),"${name}",_jsc_${isa.name.name}_alloc,_jsc_${isa.name.name}_dealloc`)
 
-        for (let m of ObjectClass.methods) {
+        for (let m of baseClassSet.get('Object')!.methods) {
             if (methodSet.has(m.name.name)) {
                 vs.push(`,_jsc_${isa.name.name}_${m.name.name}`)
             } else {
@@ -292,45 +335,76 @@ export function toClassConst(isa: Class, base?: Class): string {
 
 export function toSource(m: Module): Source {
 
-    let included: string[] = [];
+    let include_h: string[] = [];
+    let include_c: string[] = [];
     let implemented: string[] = [];
 
-    included.push(toDoc(m));
+    include_h.push(toDoc(m));
+    include_c.push(toDoc(m));
 
     {
         let name = toSymbolModule(m.name);
-        included.push(`#ifndef jsc_${name}_h\n#define jsc_${name}_h\n\n`);
+        include_h.push(`#ifndef jsc_${name}_h\n#define jsc_${name}_h\n\n`);
     }
 
     implemented.push(toDoc(m));
 
     /** include */
-    implemented.push(toInclude({
+    include_c.push(toInclude({
         name: 'jsc'
     }))
 
+    include_c.push(toInclude({
+        name: m.name.name,
+    }));
+
     for (let s of m.includes) {
         if (s.export) {
-            included.push(toInclude(s))
+            include_h.push(toInclude(s))
         }
-        implemented.push(toInclude(s))
+        include_c.push(toInclude(s))
     }
 
     implemented.push(toInclude({
         name: m.name.name,
-    }))
+    }, 'inc'))
 
-    included.push('#ifdef __cplusplus\nextern "C" {\n#endif\n\n');
+    include_h.push('#ifdef __cplusplus\nextern "C" {\n#endif\n\n');
+
+    /** var definition */
+
+    for (let v of m.vars) {
+        let n = `jsc_${toSymbolName(v.name)}`
+        if (v.name.export) {
+            include_h.push(toDoc(v, 1));
+            if (v.type.kind == TypeKind.PTR && v.type.func) {
+                include_h.push(`\textern ${toSymbolModule(m.name)}${toFunctionType(v.type.func, n)};\n`)
+            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+                include_h.push(`\textern ${toType({ kind: TypeKind.OBJECT })} ${n};\n`)
+            } else {
+                include_h.push(`\textern ${toType(v.type)} ${n};\n`)
+            }
+        } else {
+            include_c.push(toDoc(v, 1));
+            if (v.type.kind == TypeKind.PTR && v.type.func) {
+                include_c.push(`static ${toFunctionType(v.type.func, n)} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
+            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+                include_c.push(`static ${toType({ kind: TypeKind.OBJECT })} ${n} = ${toTypeDefaultValue(v.type)} ;\n`)
+            } else {
+                include_c.push(`static ${toType(v.type)} ${n} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
+            }
+        }
+    }
 
     /** function definition */
     for (let f of m.functions) {
         if (f.name.export) {
-            included.push(toDoc(f, 1));
-            included.push("\t");
-            included.push(toFunctionDefinition(f))
+            include_h.push(toDoc(f, 1));
+            include_h.push("\t");
+            include_h.push(toFunctionDefinition(f))
         } else {
-            implemented.push(toDoc(f));
-            implemented.push(toFunctionDefinition(f))
+            include_c.push(toDoc(f));
+            include_c.push(toFunctionDefinition(f))
         }
     }
 
@@ -340,51 +414,158 @@ export function toSource(m: Module): Source {
         if (isa.name.export) {
 
             for (let m of isa.methods) {
-                included.push(toMethodTypeDefinition(isa, m, 1))
+                include_h.push(toMethodTypeDefinition(isa, m, 1))
             }
 
-            included.push(toDoc(isa, 1));
-            included.push(toClassDefinition(isa, 1));
-            included.push(`${"\t".repeat(1)}extern jsc_${toSymbolName(isa.name)}_class_t jsc_${toSymbolName(isa.name)};\n\n`);
+            include_h.push(toDoc(isa, 1));
+            include_h.push(toClassDefinition(isa, 1));
+            include_h.push(`${"\t".repeat(1)}extern jsc_${toSymbolName(isa.name)}_class_t jsc_${toSymbolName(isa.name)};\n\n`);
 
-            included.push(toClassInstanceDefinition(isa, 1));
+            include_h.push(toClassInstanceDefinition(isa, 1));
 
-            included.push("\n");
+            include_h.push("\n");
 
             for (let m of isa.methods) {
-                included.push(toMethodClassDefinition(isa, m, 1))
+                include_h.push(toMethodClassDefinition(isa, m, 1))
             }
 
-            included.push("\n");
+            include_h.push("\n");
 
             for (let m of isa.methods) {
-                included.push(toMethodDefinition(isa, m, 1))
+                include_h.push(toMethodDefinition(isa, m, 1))
             }
 
         } else {
 
             for (let m of isa.methods) {
-                implemented.push(toMethodTypeDefinition(isa, m))
+                include_c.push(toMethodTypeDefinition(isa, m))
             }
 
-            implemented.push(toDoc(isa));
-            implemented.push(toClassDefinition(isa));
+            include_c.push(toDoc(isa));
+            include_c.push(toClassDefinition(isa));
 
-            implemented.push("\n");
+            include_c.push("\n");
 
-            implemented.push(toClassInstanceDefinition(isa));
+            include_c.push(toClassInstanceDefinition(isa));
 
-            implemented.push("\n");
+            include_c.push("\n");
 
             for (let m of isa.methods) {
-                implemented.push(toMethodClassDefinition(isa, m))
+                include_c.push(toMethodClassDefinition(isa, m))
             }
 
-            implemented.push("\n");
+            include_c.push("\n");
 
             for (let m of isa.methods) {
-                implemented.push(toMethodDefinition(isa, m))
+                include_c.push(toMethodDefinition(isa, m))
             }
+        }
+    }
+
+    include_c.push("\n/* var implemented */\n");
+
+    /** var implemented */
+    for (let v of m.vars) {
+        let n = `jsc_${toSymbolModule(m.name)}_${v.name.name}`
+        if (v.name.export) {
+            if (v.type.kind == TypeKind.PTR && v.type.func) {
+                include_c.push(`${toFunctionType(v.type.func, n)} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
+            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+                include_c.push(`static ${toType({ kind: TypeKind.OBJECT })} ${n} = ${toTypeDefaultValue(v.type)} ;\n`)
+            } else {
+                include_c.push(`${toType(v.type)} ${n} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
+            }
+        }
+    }
+
+    include_c.push("\n/* class implemented */\n");
+    implemented.push("\n/* class implemented */\n");
+
+    /** class implemented */
+    for (let isa of m.classes) {
+
+        let name = toSymbolName(isa.name);
+
+        include_c.push(`static void _jsc_${isa.name.name}_alloc(jsc_class_t * __isa, jsc_object_t * __object);\n`)
+        include_c.push(`static void _jsc_${isa.name.name}_dealloc(jsc_class_t * __isa, jsc_object_t * __object);\n`)
+
+        for (let m of isa.methods) {
+            include_c.push(`static ${toType(m.returnType)} _jsc_${isa.name.name}_${m.name.name}(jsc_class_t * __isa, jsc_object_t * __object${toArgumentsDefinition(m.arguments)});\n`)
+        }
+
+        include_c.push(`static void _jsc_${isa.name.name}_alloc(jsc_class_t * __isa, jsc_object_t * __object) {}\n`)
+
+        include_c.push(`static void _jsc_${isa.name.name}_dealloc(jsc_class_t * __isa, jsc_object_t * __object) {\n`)
+
+        let hasStrong = false;
+        for (let p of isa.properties) {
+            if (!p.type.weak && (p.type.kind == TypeKind.OBJECT || (p.type.kind == TypeKind.STRING && !p.type.CString))) {
+                hasStrong = true;
+                break
+            }
+        }
+
+        if (hasStrong) {
+            include_c.push(`\tjsc_${name}_t * __v = (jsc_${name}_t *) __object;\n`)
+            for (let p of isa.properties) {
+                if (!p.type.weak) {
+                    if (p.type.kind == TypeKind.STRING || p.type.kind == TypeKind.OBJECT) {
+                        include_c.push(`\tjsc_setStrong(&__v->${p.name.name},NULL);\n`)
+                    } else if (p.type.kind == TypeKind.VARIANT) {
+                        include_c.push(`\tjsc_veriant_setStrong(&__v->${p.name.name},jsc_Nil);\n`)
+                    }
+                }
+            }
+        }
+
+        include_c.push(`}\n`)
+
+        if (!isa.name.export) {
+            include_c.push('static ')
+        }
+
+        include_c.push(`jsc_${name}_class_t jsc_${name} = ${toClassConst(isa, isa)};\n`)
+
+        for (let m of isa.methods) {
+
+            implemented.push(`static ${toType(m.returnType)} _jsc_${isa.name.name}_${m.name.name}(jsc_class_t * __isa, jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
+
+            if (m.body) {
+                implemented.push(m.body(1))
+            } else if (m.returnType.kind != TypeKind.VOID) {
+                implemented.push(`\treturn ${toTypeDefaultValue(m.returnType)};\n`)
+            }
+
+            implemented.push(`}\n`)
+
+            include_c.push(`${m.name.export ? '' : 'static '}${toType(m.returnType)} jsc_${name}_${m.name.name}_(jsc_class_t * __isa, jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
+            include_c.push(`\tif(__isa == NULL || __object == NULL) {
+        return ${toTypeDefaultValue(m.returnType)};
+    }
+
+    if(jsc_class_isKind(__isa, (jsc_class_t *) &jsc_${name})) {
+        jsc_${name}_class_t * s = (jsc_${name}_class_t *) __isa;
+        if(s->${m.name.name}) {
+            ${m.returnType.kind == TypeKind.VOID ? '' : 'return '}(*s->${m.name.name})(__isa,__object${toArgumentsName(m.arguments)});
+        } else {
+            ${m.returnType.kind == TypeKind.VOID ? '' : 'return '}jsc_${name}_${m.name.name}_(__isa->isa,__object${toArgumentsName(m.arguments)});
+        }
+    }
+
+    ${m.returnType.kind == TypeKind.VOID ? '\n' : 'return ' + toTypeDefaultValue(m.returnType) + ';\n'}`)
+
+            include_c.push(`}\n`)
+
+            include_c.push(`${m.name.export ? '' : 'static '}${toType(m.returnType)} jsc_${name}_${m.name.name}(jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
+            include_c.push(`\tif(__object == NULL) {
+        return ${toTypeDefaultValue(m.returnType)};
+    }
+    ${m.returnType.kind == TypeKind.VOID ? '' : 'return '}jsc_${name}_${m.name.name}_(__object->isa,__object${toArgumentsName(m.arguments)});\n`)
+
+            include_c.push(`}\n`)
+
+            include_c.push(`\n`)
+
         }
     }
 
@@ -395,96 +576,12 @@ export function toSource(m: Module): Source {
         implemented.push(toFunctionImplemented(f))
     }
 
-    implemented.push("\n/* class implemented */\n");
-
-    /** class implemented */
-    for (let isa of m.classes) {
-
-        let name = toSymbolName(isa.name);
-
-        implemented.push(`static void _jsc_${isa.name.name}_alloc(struct jsc_class_t * __isa, struct jsc_object_t * __object);\n`)
-        implemented.push(`static void _jsc_${isa.name.name}_dealloc(struct jsc_class_t * __isa, struct jsc_object_t * __object);\n`)
-
-        for (let m of isa.methods) {
-            implemented.push(`static ${toType(m.returnType)} _jsc_${isa.name.name}_${m.name.name}(struct jsc_class_t * __isa, struct jsc_object_t * __object${toArgumentsDefinition(m.arguments)});\n`)
-        }
-
-        implemented.push(`static void _jsc_${isa.name.name}_alloc(struct jsc_class_t * __isa, struct jsc_object_t * __object) {}\n`)
-
-        implemented.push(`static void _jsc_${isa.name.name}_dealloc(struct jsc_class_t * __isa, struct jsc_object_t * __object) {\n`)
-
-        let hasStrong = false;
-        for(let p of isa.properties) {
-            if(!p.weak) {
-                hasStrong = true;
-                break
-            }
-        }
-
-        if(hasStrong) {
-            implemented.push(`\tjsc_${name}_t * __v = (jsc_${name}_t *) __object;\n`)
-            for(let p of isa.properties) {
-                if(!p.weak) {
-                    if(p.type == Type.STRING || p.type == Type.OBJECT) {
-                        implemented.push(`\tjsc_setStrong(&__v->${p.name.name},NULL);\n`)
-                    } else {
-                        implemented.push(`\tjsc_veriant_setStrong(&__v->${p.name.name},jsc_Nil);\n`)
-                    }
-                }
-            }    
-        }
-        
-        implemented.push(`}\n`)
-
-        if (!isa.name.export) {
-            implemented.push('static ')
-        }
-
-        implemented.push(`jsc_${name}_class_t jsc_${name} = ${toClassConst(isa, isa)};\n`)
-
-        for (let m of isa.methods) {
-            implemented.push(`static ${toType(m.returnType)} _jsc_${isa.name.name}_${m.name.name}(struct jsc_class_t * __isa, struct jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
-            if(m.body) {
-                implemented.push(m.body(1))
-            } else if (m.returnType != Type.VOID) {
-                implemented.push(`\treturn ${toTypeDefaultValue(m.returnType)};\n`)
-            }
-            implemented.push(`}\n`)
-
-            implemented.push(`static ${toType(m.returnType)} jsc_${name}_${m.name.name}_(struct jsc_class_t * __isa, struct jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
-            implemented.push(`\tif(__isa == NULL || __object == NULL) {
-        return ${toTypeDefaultValue(m.returnType)};
-    }
-
-    if(jsc_class_isKind(__isa, (jsc_class_t *) &jsc_${name})) {
-        jsc_${name}_class_t * s = (jsc_${name}_class_t *) __isa;
-        if(s->${m.name.name}) {
-            ${m.returnType == Type.VOID ? '' : 'return '}(*s->${m.name.name})(__isa,__object${toArgumentsName(m.arguments)});
-        } else {
-            ${m.returnType == Type.VOID ? '' : 'return '}jsc_${name}_${m.name.name}_(isa->isa,object${toArgumentsName(m.arguments)});
-        }
-    }
-
-    ${m.returnType == Type.VOID ? '\n' : 'return ' + toTypeDefaultValue(m.returnType) + ';\n'}`)
-            implemented.push(`}\n`)
-
-            implemented.push(`static ${toType(m.returnType)} jsc_${name}_${m.name.name}(struct jsc_object_t * __object${toArgumentsDefinition(m.arguments)}) {\n`)
-            implemented.push(`\tif(__object == NULL) {
-        return ${toTypeDefaultValue(m.returnType)};
-    }
-    ${m.returnType == Type.VOID ? '' : 'return '}jsc_${name}_${m.name.name}_(__object->isa,__object${toArgumentsName(m.arguments)});\n`)
-            implemented.push(`}\n`)
-
-            implemented.push(`\n`)
-
-        }
-    }
-
-    included.push('\n#ifdef __cplusplus\n}\n#endif\n\n');
-    included.push(`#endif\n\n`);
+    include_h.push('\n#ifdef __cplusplus\n}\n#endif\n\n');
+    include_h.push(`#endif\n\n`);
 
     return {
-        included: included.join(''),
+        include_h: include_h.join(''),
+        include_c: include_c.join(''),
         implemented: implemented.join('')
     }
 }

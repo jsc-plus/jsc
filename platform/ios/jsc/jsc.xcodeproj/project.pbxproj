@@ -44,10 +44,47 @@
 		AC97D127282203CE00D610A7 /* jsc_DataView.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D125282203CE00D610A7 /* jsc_DataView.h */; };
 		AC97D128282203CE00D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
 		AC97D129282203CE00D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
+		AC97D13C2823612900D610A7 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1382823612900D610A7 /* main.c */; };
+		AC97D13D2823612900D610A7 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D13A2823612900D610A7 /* test.c */; };
+		AC97D13E2823615100D610A7 /* jsc_Map.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1112820E7EF00D610A7 /* jsc_Map.cc */; };
+		AC97D13F2823615100D610A7 /* jsc_class.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529BE278E733D007ACCCF /* jsc_class.c */; };
+		AC97D1402823615100D610A7 /* jsc_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529E32796BB61007ACCCF /* jsc_buffer.c */; };
+		AC97D1412823615100D610A7 /* jsc_ArrayBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */; };
+		AC97D1422823615100D610A7 /* jsc_Iterator.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1172820FBF500D610A7 /* jsc_Iterator.c */; };
+		AC97D1432823615100D610A7 /* jsc_String.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529DE27951236007ACCCF /* jsc_String.c */; };
+		AC97D1442823615100D610A7 /* jsc_Number.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D10D2820DEC700D610A7 /* jsc_Number.c */; };
+		AC97D1452823615100D610A7 /* jsc_Set.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D11B28210B4C00D610A7 /* jsc_Set.cc */; };
+		AC97D1462823615100D610A7 /* jsc_variant.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D42791237E007ACCCF /* jsc_variant.c */; };
+		AC97D1472823615100D610A7 /* jsc_log.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529CD278E7700007ACCCF /* jsc_log.c */; };
+		AC97D1482823615100D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
+		AC97D1492823615100D610A7 /* jsc_Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.cc */; };
+		AC97D14A2823640C00D610A7 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AC97D10A2820CF8D00D610A7 /* libiconv.tbd */; };
+		AC97D1562823FDCA00D610A7 /* test.inc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1552823FDCA00D610A7 /* test.inc */; };
+		AC97D15D2824C51700D610A7 /* jsc_fs.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1582824C51600D610A7 /* jsc_fs.h */; };
+		AC97D15E2824C51700D610A7 /* jsc_fs.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1592824C51600D610A7 /* jsc_fs.c */; };
+		AC97D15F2824C51700D610A7 /* jsc_fs.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1592824C51600D610A7 /* jsc_fs.c */; };
+		AC97D1602824C51700D610A7 /* jsc_fs.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1592824C51600D610A7 /* jsc_fs.c */; };
+		AC97D1672824C52800D610A7 /* jsc_crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1622824C52700D610A7 /* jsc_crypto.c */; };
+		AC97D1682824C52800D610A7 /* jsc_crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1622824C52700D610A7 /* jsc_crypto.c */; };
+		AC97D1692824C52800D610A7 /* jsc_crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1622824C52700D610A7 /* jsc_crypto.c */; };
+		AC97D16A2824C52800D610A7 /* jsc_crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1632824C52800D610A7 /* jsc_crypto.h */; };
+		AC97D16E2824E2E300D610A7 /* jsc_net.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D16B2824E2E200D610A7 /* jsc_net.c */; };
+		AC97D16F2824E2E300D610A7 /* jsc_net.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D16B2824E2E200D610A7 /* jsc_net.c */; };
+		AC97D1702824E2E300D610A7 /* jsc_net.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D16B2824E2E200D610A7 /* jsc_net.c */; };
+		AC97D1742824E2E300D610A7 /* jsc_net.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D16D2824E2E300D610A7 /* jsc_net.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		AC4529C3278E7522007ACCCF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		AC97D12D282360ED00D610A7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -88,6 +125,22 @@
 		AC97D125282203CE00D610A7 /* jsc_DataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_DataView.h; sourceTree = "<group>"; };
 		AC97D126282203CE00D610A7 /* jsc_DataView.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_DataView.c; sourceTree = "<group>"; };
 		AC97D12A282271E500D610A7 /* jsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc.h; sourceTree = "<group>"; };
+		AC97D12F282360ED00D610A7 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC97D1372823612900D610A7 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		AC97D1382823612900D610A7 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		AC97D1392823612900D610A7 /* tsconfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tsconfig.json; sourceTree = "<group>"; };
+		AC97D13A2823612900D610A7 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		AC97D13B2823612900D610A7 /* test.jsc.ts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.jsc.ts; sourceTree = "<group>"; };
+		AC97D1552823FDCA00D610A7 /* test.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = test.inc; sourceTree = "<group>"; };
+		AC97D1572824C51600D610A7 /* jsc_fs.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = jsc_fs.inc; sourceTree = "<group>"; };
+		AC97D1582824C51600D610A7 /* jsc_fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_fs.h; sourceTree = "<group>"; };
+		AC97D1592824C51600D610A7 /* jsc_fs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsc_fs.c; sourceTree = "<group>"; };
+		AC97D1612824C52700D610A7 /* jsc_crypto.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = jsc_crypto.inc; sourceTree = "<group>"; };
+		AC97D1622824C52700D610A7 /* jsc_crypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsc_crypto.c; sourceTree = "<group>"; };
+		AC97D1632824C52800D610A7 /* jsc_crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_crypto.h; sourceTree = "<group>"; };
+		AC97D16B2824E2E200D610A7 /* jsc_net.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsc_net.c; sourceTree = "<group>"; };
+		AC97D16C2824E2E300D610A7 /* jsc_net.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = jsc_net.inc; sourceTree = "<group>"; };
+		AC97D16D2824E2E300D610A7 /* jsc_net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_net.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +159,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AC97D12C282360ED00D610A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC97D14A2823640C00D610A7 /* libiconv.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -114,6 +175,7 @@
 			children = (
 				AC4529B1278E6EE0007ACCCF /* jsc */,
 				AC4529C6278E7522007ACCCF /* cli */,
+				AC97D130282360ED00D610A7 /* test */,
 				AC4529B0278E6EE0007ACCCF /* Products */,
 				AC97D1092820CF8D00D610A7 /* Frameworks */,
 			);
@@ -124,6 +186,7 @@
 			children = (
 				AC4529AF278E6EE0007ACCCF /* jsc.framework */,
 				AC4529C5278E7522007ACCCF /* cli */,
+				AC97D12F282360ED00D610A7 /* test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -163,6 +226,15 @@
 				AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */,
 				AC97D125282203CE00D610A7 /* jsc_DataView.h */,
 				AC97D126282203CE00D610A7 /* jsc_DataView.c */,
+				AC97D1592824C51600D610A7 /* jsc_fs.c */,
+				AC97D1582824C51600D610A7 /* jsc_fs.h */,
+				AC97D1572824C51600D610A7 /* jsc_fs.inc */,
+				AC97D1622824C52700D610A7 /* jsc_crypto.c */,
+				AC97D1632824C52800D610A7 /* jsc_crypto.h */,
+				AC97D1612824C52700D610A7 /* jsc_crypto.inc */,
+				AC97D16B2824E2E200D610A7 /* jsc_net.c */,
+				AC97D16D2824E2E300D610A7 /* jsc_net.h */,
+				AC97D16C2824E2E300D610A7 /* jsc_net.inc */,
 				AC97D12A282271E500D610A7 /* jsc.h */,
 			);
 			name = src;
@@ -185,6 +257,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AC97D130282360ED00D610A7 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				AC97D1362823612900D610A7 /* jsc */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		AC97D1362823612900D610A7 /* jsc */ = {
+			isa = PBXGroup;
+			children = (
+				AC97D1372823612900D610A7 /* test.h */,
+				AC97D1552823FDCA00D610A7 /* test.inc */,
+				AC97D1382823612900D610A7 /* main.c */,
+				AC97D1392823612900D610A7 /* tsconfig.json */,
+				AC97D13A2823612900D610A7 /* test.c */,
+				AC97D13B2823612900D610A7 /* test.jsc.ts */,
+			);
+			name = jsc;
+			path = ../../../../jsc;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -193,8 +287,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC97D1142820E7EF00D610A7 /* jsc_Map.h in Headers */,
+				AC97D16A2824C52800D610A7 /* jsc_crypto.h in Headers */,
 				AC4529DF27951236007ACCCF /* jsc_String.h in Headers */,
+				AC97D15D2824C51700D610A7 /* jsc_fs.h in Headers */,
 				AC4529DA2791276A007ACCCF /* jsc_Array.h in Headers */,
+				AC97D1742824E2E300D610A7 /* jsc_net.h in Headers */,
 				AC97D1222822002500D610A7 /* jsc_ArrayBuffer.h in Headers */,
 				AC97D127282203CE00D610A7 /* jsc_DataView.h in Headers */,
 				AC4529E42796BB61007ACCCF /* jsc_buffer.h in Headers */,
@@ -244,6 +341,23 @@
 			productReference = AC4529C5278E7522007ACCCF /* cli */;
 			productType = "com.apple.product-type.tool";
 		};
+		AC97D12E282360ED00D610A7 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC97D133282360ED00D610A7 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				AC97D12B282360ED00D610A7 /* Sources */,
+				AC97D12C282360ED00D610A7 /* Frameworks */,
+				AC97D12D282360ED00D610A7 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = test;
+			productName = test;
+			productReference = AC97D12F282360ED00D610A7 /* test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -260,6 +374,9 @@
 					};
 					AC4529C4278E7522007ACCCF = {
 						CreatedOnToolsVersion = 13.1;
+					};
+					AC97D12E282360ED00D610A7 = {
+						CreatedOnToolsVersion = 13.3.1;
 					};
 				};
 			};
@@ -278,6 +395,7 @@
 			targets = (
 				AC4529AE278E6EE0007ACCCF /* jsc */,
 				AC4529C4278E7522007ACCCF /* cli */,
+				AC97D12E282360ED00D610A7 /* test */,
 			);
 		};
 /* End PBXProject section */
@@ -297,9 +415,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC97D16E2824E2E300D610A7 /* jsc_net.c in Sources */,
 				AC4529E52796BB61007ACCCF /* jsc_buffer.c in Sources */,
 				AC97D1132820E7EF00D610A7 /* jsc_Map.cc in Sources */,
 				AC4529C0278E733D007ACCCF /* jsc_class.c in Sources */,
+				AC97D15E2824C51700D610A7 /* jsc_fs.c in Sources */,
 				AC97D1232822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
 				AC4529D62791237E007ACCCF /* jsc_variant.c in Sources */,
 				AC4529DB2791276A007ACCCF /* jsc_Array.cc in Sources */,
@@ -308,6 +428,7 @@
 				AC97D1192820FBF600D610A7 /* jsc_Iterator.c in Sources */,
 				AC97D11D28210B4C00D610A7 /* jsc_Set.cc in Sources */,
 				AC4529CE278E7700007ACCCF /* jsc_log.c in Sources */,
+				AC97D1672824C52800D610A7 /* jsc_crypto.c in Sources */,
 				AC4529E027951236007ACCCF /* jsc_String.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,19 +437,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC97D16F2824E2E300D610A7 /* jsc_net.c in Sources */,
 				AC4529DC2791276A007ACCCF /* jsc_Array.cc in Sources */,
 				AC4529E127951236007ACCCF /* jsc_String.c in Sources */,
 				AC97D11A2820FBFF00D610A7 /* jsc_Iterator.c in Sources */,
 				AC4529E62796BB61007ACCCF /* jsc_buffer.c in Sources */,
 				AC4529C8278E7522007ACCCF /* main.c in Sources */,
 				AC4529CC278E7543007ACCCF /* jsc_class.c in Sources */,
+				AC97D15F2824C51700D610A7 /* jsc_fs.c in Sources */,
 				AC97D1242822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
 				AC97D129282203CE00D610A7 /* jsc_DataView.c in Sources */,
 				AC97D1152820ED0500D610A7 /* jsc_Map.cc in Sources */,
 				AC97D11F28210B4E00D610A7 /* jsc_Set.cc in Sources */,
+				AC97D1682824C52800D610A7 /* jsc_crypto.c in Sources */,
 				AC97D1102820E1E700D610A7 /* jsc_Number.c in Sources */,
 				AC4529D72791237E007ACCCF /* jsc_variant.c in Sources */,
 				AC4529D2278E776B007ACCCF /* jsc_log.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC97D12B282360ED00D610A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC97D1562823FDCA00D610A7 /* test.inc in Sources */,
+				AC97D1442823615100D610A7 /* jsc_Number.c in Sources */,
+				AC97D1692824C52800D610A7 /* jsc_crypto.c in Sources */,
+				AC97D1412823615100D610A7 /* jsc_ArrayBuffer.c in Sources */,
+				AC97D1422823615100D610A7 /* jsc_Iterator.c in Sources */,
+				AC97D1472823615100D610A7 /* jsc_log.c in Sources */,
+				AC97D1702824E2E300D610A7 /* jsc_net.c in Sources */,
+				AC97D1452823615100D610A7 /* jsc_Set.cc in Sources */,
+				AC97D13C2823612900D610A7 /* main.c in Sources */,
+				AC97D1432823615100D610A7 /* jsc_String.c in Sources */,
+				AC97D1482823615100D610A7 /* jsc_DataView.c in Sources */,
+				AC97D1602824C51700D610A7 /* jsc_fs.c in Sources */,
+				AC97D13F2823615100D610A7 /* jsc_class.c in Sources */,
+				AC97D13E2823615100D610A7 /* jsc_Map.cc in Sources */,
+				AC97D13D2823612900D610A7 /* test.c in Sources */,
+				AC97D1402823615100D610A7 /* jsc_buffer.c in Sources */,
+				AC97D1492823615100D610A7 /* jsc_Array.cc in Sources */,
+				AC97D1462823615100D610A7 /* jsc_variant.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +701,26 @@
 			};
 			name = Release;
 		};
+		AC97D134282360ED00D610A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AC97D135282360ED00D610A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -578,6 +747,15 @@
 			buildConfigurations = (
 				AC4529CA278E7522007ACCCF /* Debug */,
 				AC4529CB278E7522007ACCCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC97D133282360ED00D610A7 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC97D134282360ED00D610A7 /* Debug */,
+				AC97D135282360ED00D610A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

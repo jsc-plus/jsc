@@ -1,0 +1,1845 @@
+{
+  "vars": {
+    "fs_[object Object]": {
+      "name": {
+        "name": "SEEK_END",
+        "module": {
+          "name": "fs"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 12,
+        "var": true
+      },
+      "title": "",
+      "tags": []
+    }
+  },
+  "functions": {
+    "fs_[object Object]": {
+      "name": {
+        "name": "open",
+        "module": {
+          "name": "fs"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 2,
+        "isa": {
+          "name": {
+            "name": "File",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "properties": [
+            {
+              "name": {
+                "name": "_fd"
+              },
+              "type": {
+                "kind": 12,
+                "property": true
+              },
+              "title": "",
+              "tags": []
+            }
+          ],
+          "methods": [
+            {
+              "name": {
+                "name": "fd",
+                "module": {
+                  "name": "fs"
+                },
+                "export": true
+              },
+              "returnType": {
+                "kind": 12
+              },
+              "arguments": [],
+              "title": "",
+              "tags": []
+            },
+            {
+              "name": {
+                "name": "close",
+                "module": {
+                  "name": "fs"
+                },
+                "export": true
+              },
+              "returnType": {
+                "kind": 0
+              },
+              "arguments": [],
+              "title": "",
+              "tags": []
+            },
+            {
+              "name": {
+                "name": "read",
+                "module": {
+                  "name": "fs"
+                },
+                "export": true
+              },
+              "returnType": {
+                "kind": 14
+              },
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": {
+                    "kind": 2,
+                    "isa": {
+                      "base": {
+                        "name": {
+                          "name": "Object"
+                        },
+                        "properties": [
+                          {
+                            "name": {
+                              "name": "retainCount"
+                            },
+                            "type": {
+                              "kind": 12
+                            }
+                          }
+                        ],
+                        "methods": [
+                          {
+                            "name": {
+                              "name": "hashCode"
+                            },
+                            "returnType": {
+                              "kind": 15
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "compare"
+                            },
+                            "returnType": {
+                              "kind": 14
+                            },
+                            "arguments": [
+                              {
+                                "name": "v",
+                                "type": {
+                                  "kind": 2
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": {
+                              "name": "toString"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toInt64"
+                            },
+                            "returnType": {
+                              "kind": 10
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toFloat64"
+                            },
+                            "returnType": {
+                              "kind": 17
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toBoolean"
+                            },
+                            "returnType": {
+                              "kind": 18
+                            },
+                            "arguments": []
+                          }
+                        ]
+                      },
+                      "name": {
+                        "name": "DataView"
+                      },
+                      "properties": [
+                        {
+                          "name": {
+                            "name": "byteLength"
+                          },
+                          "type": {
+                            "kind": 12
+                          },
+                          "getter": "byteLength"
+                        },
+                        {
+                          "name": {
+                            "name": "byteOffset"
+                          },
+                          "type": {
+                            "kind": 12
+                          },
+                          "getter": "byteOffset"
+                        },
+                        {
+                          "name": {
+                            "name": "buffer"
+                          },
+                          "type": {
+                            "kind": 2,
+                            "isa": {
+                              "base": {
+                                "name": {
+                                  "name": "Object"
+                                },
+                                "properties": [
+                                  {
+                                    "name": {
+                                      "name": "retainCount"
+                                    },
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ],
+                                "methods": [
+                                  {
+                                    "name": {
+                                      "name": "hashCode"
+                                    },
+                                    "returnType": {
+                                      "kind": 15
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "compare"
+                                    },
+                                    "returnType": {
+                                      "kind": 14
+                                    },
+                                    "arguments": [
+                                      {
+                                        "name": "v",
+                                        "type": {
+                                          "kind": 2
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toString"
+                                    },
+                                    "returnType": {
+                                      "kind": 2
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toInt64"
+                                    },
+                                    "returnType": {
+                                      "kind": 10
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toFloat64"
+                                    },
+                                    "returnType": {
+                                      "kind": 17
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toBoolean"
+                                    },
+                                    "returnType": {
+                                      "kind": 18
+                                    },
+                                    "arguments": []
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "name": "ArrayBuffer"
+                              },
+                              "new": {
+                                "name": {
+                                  "name": "new"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "length",
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ]
+                              },
+                              "properties": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "type": {
+                                    "kind": 12
+                                  },
+                                  "getter": "byteLength"
+                                }
+                              ],
+                              "methods": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "returnType": {
+                                    "kind": 12
+                                  },
+                                  "arguments": []
+                                }
+                              ]
+                            }
+                          },
+                          "getter": "buffer"
+                        }
+                      ],
+                      "methods": [
+                        {
+                          "name": {
+                            "name": "byteLength"
+                          },
+                          "returnType": {
+                            "kind": 12
+                          },
+                          "arguments": []
+                        },
+                        {
+                          "name": {
+                            "name": "byteOffset"
+                          },
+                          "returnType": {
+                            "kind": 12
+                          },
+                          "arguments": []
+                        },
+                        {
+                          "name": {
+                            "name": "buffer"
+                          },
+                          "returnType": {
+                            "kind": 2,
+                            "isa": {
+                              "base": {
+                                "name": {
+                                  "name": "Object"
+                                },
+                                "properties": [
+                                  {
+                                    "name": {
+                                      "name": "retainCount"
+                                    },
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ],
+                                "methods": [
+                                  {
+                                    "name": {
+                                      "name": "hashCode"
+                                    },
+                                    "returnType": {
+                                      "kind": 15
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "compare"
+                                    },
+                                    "returnType": {
+                                      "kind": 14
+                                    },
+                                    "arguments": [
+                                      {
+                                        "name": "v",
+                                        "type": {
+                                          "kind": 2
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toString"
+                                    },
+                                    "returnType": {
+                                      "kind": 2
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toInt64"
+                                    },
+                                    "returnType": {
+                                      "kind": 10
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toFloat64"
+                                    },
+                                    "returnType": {
+                                      "kind": 17
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toBoolean"
+                                    },
+                                    "returnType": {
+                                      "kind": 18
+                                    },
+                                    "arguments": []
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "name": "ArrayBuffer"
+                              },
+                              "new": {
+                                "name": {
+                                  "name": "new"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "length",
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ]
+                              },
+                              "properties": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "type": {
+                                    "kind": 12
+                                  },
+                                  "getter": "byteLength"
+                                }
+                              ],
+                              "methods": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "returnType": {
+                                    "kind": 12
+                                  },
+                                  "arguments": []
+                                }
+                              ]
+                            }
+                          },
+                          "arguments": []
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "title": "",
+              "tags": []
+            },
+            {
+              "name": {
+                "name": "seek",
+                "module": {
+                  "name": "fs"
+                },
+                "export": true
+              },
+              "returnType": {
+                "kind": 14
+              },
+              "arguments": [
+                {
+                  "name": "off",
+                  "type": {
+                    "kind": 14
+                  }
+                },
+                {
+                  "name": "mode",
+                  "type": {
+                    "kind": 12
+                  }
+                }
+              ],
+              "title": "",
+              "tags": []
+            },
+            {
+              "name": {
+                "name": "write",
+                "module": {
+                  "name": "fs"
+                },
+                "export": true
+              },
+              "returnType": {
+                "kind": 14
+              },
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": {
+                    "kind": 2,
+                    "isa": {
+                      "base": {
+                        "name": {
+                          "name": "Object"
+                        },
+                        "properties": [
+                          {
+                            "name": {
+                              "name": "retainCount"
+                            },
+                            "type": {
+                              "kind": 12
+                            }
+                          }
+                        ],
+                        "methods": [
+                          {
+                            "name": {
+                              "name": "hashCode"
+                            },
+                            "returnType": {
+                              "kind": 15
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "compare"
+                            },
+                            "returnType": {
+                              "kind": 14
+                            },
+                            "arguments": [
+                              {
+                                "name": "v",
+                                "type": {
+                                  "kind": 2
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": {
+                              "name": "toString"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toInt64"
+                            },
+                            "returnType": {
+                              "kind": 10
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toFloat64"
+                            },
+                            "returnType": {
+                              "kind": 17
+                            },
+                            "arguments": []
+                          },
+                          {
+                            "name": {
+                              "name": "toBoolean"
+                            },
+                            "returnType": {
+                              "kind": 18
+                            },
+                            "arguments": []
+                          }
+                        ]
+                      },
+                      "name": {
+                        "name": "DataView"
+                      },
+                      "properties": [
+                        {
+                          "name": {
+                            "name": "byteLength"
+                          },
+                          "type": {
+                            "kind": 12
+                          },
+                          "getter": "byteLength"
+                        },
+                        {
+                          "name": {
+                            "name": "byteOffset"
+                          },
+                          "type": {
+                            "kind": 12
+                          },
+                          "getter": "byteOffset"
+                        },
+                        {
+                          "name": {
+                            "name": "buffer"
+                          },
+                          "type": {
+                            "kind": 2,
+                            "isa": {
+                              "base": {
+                                "name": {
+                                  "name": "Object"
+                                },
+                                "properties": [
+                                  {
+                                    "name": {
+                                      "name": "retainCount"
+                                    },
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ],
+                                "methods": [
+                                  {
+                                    "name": {
+                                      "name": "hashCode"
+                                    },
+                                    "returnType": {
+                                      "kind": 15
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "compare"
+                                    },
+                                    "returnType": {
+                                      "kind": 14
+                                    },
+                                    "arguments": [
+                                      {
+                                        "name": "v",
+                                        "type": {
+                                          "kind": 2
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toString"
+                                    },
+                                    "returnType": {
+                                      "kind": 2
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toInt64"
+                                    },
+                                    "returnType": {
+                                      "kind": 10
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toFloat64"
+                                    },
+                                    "returnType": {
+                                      "kind": 17
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toBoolean"
+                                    },
+                                    "returnType": {
+                                      "kind": 18
+                                    },
+                                    "arguments": []
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "name": "ArrayBuffer"
+                              },
+                              "new": {
+                                "name": {
+                                  "name": "new"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "length",
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ]
+                              },
+                              "properties": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "type": {
+                                    "kind": 12
+                                  },
+                                  "getter": "byteLength"
+                                }
+                              ],
+                              "methods": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "returnType": {
+                                    "kind": 12
+                                  },
+                                  "arguments": []
+                                }
+                              ]
+                            }
+                          },
+                          "getter": "buffer"
+                        }
+                      ],
+                      "methods": [
+                        {
+                          "name": {
+                            "name": "byteLength"
+                          },
+                          "returnType": {
+                            "kind": 12
+                          },
+                          "arguments": []
+                        },
+                        {
+                          "name": {
+                            "name": "byteOffset"
+                          },
+                          "returnType": {
+                            "kind": 12
+                          },
+                          "arguments": []
+                        },
+                        {
+                          "name": {
+                            "name": "buffer"
+                          },
+                          "returnType": {
+                            "kind": 2,
+                            "isa": {
+                              "base": {
+                                "name": {
+                                  "name": "Object"
+                                },
+                                "properties": [
+                                  {
+                                    "name": {
+                                      "name": "retainCount"
+                                    },
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ],
+                                "methods": [
+                                  {
+                                    "name": {
+                                      "name": "hashCode"
+                                    },
+                                    "returnType": {
+                                      "kind": 15
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "compare"
+                                    },
+                                    "returnType": {
+                                      "kind": 14
+                                    },
+                                    "arguments": [
+                                      {
+                                        "name": "v",
+                                        "type": {
+                                          "kind": 2
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toString"
+                                    },
+                                    "returnType": {
+                                      "kind": 2
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toInt64"
+                                    },
+                                    "returnType": {
+                                      "kind": 10
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toFloat64"
+                                    },
+                                    "returnType": {
+                                      "kind": 17
+                                    },
+                                    "arguments": []
+                                  },
+                                  {
+                                    "name": {
+                                      "name": "toBoolean"
+                                    },
+                                    "returnType": {
+                                      "kind": 18
+                                    },
+                                    "arguments": []
+                                  }
+                                ]
+                              },
+                              "name": {
+                                "name": "ArrayBuffer"
+                              },
+                              "new": {
+                                "name": {
+                                  "name": "new"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "length",
+                                    "type": {
+                                      "kind": 12
+                                    }
+                                  }
+                                ]
+                              },
+                              "properties": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "type": {
+                                    "kind": 12
+                                  },
+                                  "getter": "byteLength"
+                                }
+                              ],
+                              "methods": [
+                                {
+                                  "name": {
+                                    "name": "byteLength"
+                                  },
+                                  "returnType": {
+                                    "kind": 12
+                                  },
+                                  "arguments": []
+                                }
+                              ]
+                            }
+                          },
+                          "arguments": []
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "title": "",
+              "tags": []
+            }
+          ],
+          "title": "",
+          "tags": []
+        }
+      },
+      "arguments": [
+        {
+          "name": "path",
+          "type": {
+            "kind": 20
+          }
+        },
+        {
+          "name": "flag",
+          "type": {
+            "kind": 12
+          }
+        },
+        {
+          "name": "perm",
+          "type": {
+            "kind": 12
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    }
+  },
+  "classes": {
+    "fs_[object Object]": {
+      "name": {
+        "name": "File",
+        "module": {
+          "name": "fs"
+        },
+        "export": true
+      },
+      "properties": [
+        {
+          "name": {
+            "name": "_fd"
+          },
+          "type": {
+            "kind": 12,
+            "property": true
+          },
+          "title": "",
+          "tags": []
+        }
+      ],
+      "methods": [
+        {
+          "name": {
+            "name": "fd",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "returnType": {
+            "kind": 12
+          },
+          "arguments": [],
+          "title": "",
+          "tags": []
+        },
+        {
+          "name": {
+            "name": "close",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "returnType": {
+            "kind": 0
+          },
+          "arguments": [],
+          "title": "",
+          "tags": []
+        },
+        {
+          "name": {
+            "name": "read",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "returnType": {
+            "kind": 14
+          },
+          "arguments": [
+            {
+              "name": "data",
+              "type": {
+                "kind": 2,
+                "isa": {
+                  "base": {
+                    "name": {
+                      "name": "Object"
+                    },
+                    "properties": [
+                      {
+                        "name": {
+                          "name": "retainCount"
+                        },
+                        "type": {
+                          "kind": 12
+                        }
+                      }
+                    ],
+                    "methods": [
+                      {
+                        "name": {
+                          "name": "hashCode"
+                        },
+                        "returnType": {
+                          "kind": 15
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "compare"
+                        },
+                        "returnType": {
+                          "kind": 14
+                        },
+                        "arguments": [
+                          {
+                            "name": "v",
+                            "type": {
+                              "kind": 2
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": {
+                          "name": "toString"
+                        },
+                        "returnType": {
+                          "kind": 2
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toInt64"
+                        },
+                        "returnType": {
+                          "kind": 10
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toFloat64"
+                        },
+                        "returnType": {
+                          "kind": 17
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toBoolean"
+                        },
+                        "returnType": {
+                          "kind": 18
+                        },
+                        "arguments": []
+                      }
+                    ]
+                  },
+                  "name": {
+                    "name": "DataView"
+                  },
+                  "properties": [
+                    {
+                      "name": {
+                        "name": "byteLength"
+                      },
+                      "type": {
+                        "kind": 12
+                      },
+                      "getter": "byteLength"
+                    },
+                    {
+                      "name": {
+                        "name": "byteOffset"
+                      },
+                      "type": {
+                        "kind": 12
+                      },
+                      "getter": "byteOffset"
+                    },
+                    {
+                      "name": {
+                        "name": "buffer"
+                      },
+                      "type": {
+                        "kind": 2,
+                        "isa": {
+                          "base": {
+                            "name": {
+                              "name": "Object"
+                            },
+                            "properties": [
+                              {
+                                "name": {
+                                  "name": "retainCount"
+                                },
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ],
+                            "methods": [
+                              {
+                                "name": {
+                                  "name": "hashCode"
+                                },
+                                "returnType": {
+                                  "kind": 15
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "compare"
+                                },
+                                "returnType": {
+                                  "kind": 14
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "v",
+                                    "type": {
+                                      "kind": 2
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "name": {
+                                  "name": "toString"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toInt64"
+                                },
+                                "returnType": {
+                                  "kind": 10
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toFloat64"
+                                },
+                                "returnType": {
+                                  "kind": 17
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toBoolean"
+                                },
+                                "returnType": {
+                                  "kind": 18
+                                },
+                                "arguments": []
+                              }
+                            ]
+                          },
+                          "name": {
+                            "name": "ArrayBuffer"
+                          },
+                          "new": {
+                            "name": {
+                              "name": "new"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": [
+                              {
+                                "name": "length",
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ]
+                          },
+                          "properties": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "type": {
+                                "kind": 12
+                              },
+                              "getter": "byteLength"
+                            }
+                          ],
+                          "methods": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "returnType": {
+                                "kind": 12
+                              },
+                              "arguments": []
+                            }
+                          ]
+                        }
+                      },
+                      "getter": "buffer"
+                    }
+                  ],
+                  "methods": [
+                    {
+                      "name": {
+                        "name": "byteLength"
+                      },
+                      "returnType": {
+                        "kind": 12
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "name": {
+                        "name": "byteOffset"
+                      },
+                      "returnType": {
+                        "kind": 12
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "name": {
+                        "name": "buffer"
+                      },
+                      "returnType": {
+                        "kind": 2,
+                        "isa": {
+                          "base": {
+                            "name": {
+                              "name": "Object"
+                            },
+                            "properties": [
+                              {
+                                "name": {
+                                  "name": "retainCount"
+                                },
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ],
+                            "methods": [
+                              {
+                                "name": {
+                                  "name": "hashCode"
+                                },
+                                "returnType": {
+                                  "kind": 15
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "compare"
+                                },
+                                "returnType": {
+                                  "kind": 14
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "v",
+                                    "type": {
+                                      "kind": 2
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "name": {
+                                  "name": "toString"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toInt64"
+                                },
+                                "returnType": {
+                                  "kind": 10
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toFloat64"
+                                },
+                                "returnType": {
+                                  "kind": 17
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toBoolean"
+                                },
+                                "returnType": {
+                                  "kind": 18
+                                },
+                                "arguments": []
+                              }
+                            ]
+                          },
+                          "name": {
+                            "name": "ArrayBuffer"
+                          },
+                          "new": {
+                            "name": {
+                              "name": "new"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": [
+                              {
+                                "name": "length",
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ]
+                          },
+                          "properties": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "type": {
+                                "kind": 12
+                              },
+                              "getter": "byteLength"
+                            }
+                          ],
+                          "methods": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "returnType": {
+                                "kind": 12
+                              },
+                              "arguments": []
+                            }
+                          ]
+                        }
+                      },
+                      "arguments": []
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "title": "",
+          "tags": []
+        },
+        {
+          "name": {
+            "name": "seek",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "returnType": {
+            "kind": 14
+          },
+          "arguments": [
+            {
+              "name": "off",
+              "type": {
+                "kind": 14
+              }
+            },
+            {
+              "name": "mode",
+              "type": {
+                "kind": 12
+              }
+            }
+          ],
+          "title": "",
+          "tags": []
+        },
+        {
+          "name": {
+            "name": "write",
+            "module": {
+              "name": "fs"
+            },
+            "export": true
+          },
+          "returnType": {
+            "kind": 14
+          },
+          "arguments": [
+            {
+              "name": "data",
+              "type": {
+                "kind": 2,
+                "isa": {
+                  "base": {
+                    "name": {
+                      "name": "Object"
+                    },
+                    "properties": [
+                      {
+                        "name": {
+                          "name": "retainCount"
+                        },
+                        "type": {
+                          "kind": 12
+                        }
+                      }
+                    ],
+                    "methods": [
+                      {
+                        "name": {
+                          "name": "hashCode"
+                        },
+                        "returnType": {
+                          "kind": 15
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "compare"
+                        },
+                        "returnType": {
+                          "kind": 14
+                        },
+                        "arguments": [
+                          {
+                            "name": "v",
+                            "type": {
+                              "kind": 2
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": {
+                          "name": "toString"
+                        },
+                        "returnType": {
+                          "kind": 2
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toInt64"
+                        },
+                        "returnType": {
+                          "kind": 10
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toFloat64"
+                        },
+                        "returnType": {
+                          "kind": 17
+                        },
+                        "arguments": []
+                      },
+                      {
+                        "name": {
+                          "name": "toBoolean"
+                        },
+                        "returnType": {
+                          "kind": 18
+                        },
+                        "arguments": []
+                      }
+                    ]
+                  },
+                  "name": {
+                    "name": "DataView"
+                  },
+                  "properties": [
+                    {
+                      "name": {
+                        "name": "byteLength"
+                      },
+                      "type": {
+                        "kind": 12
+                      },
+                      "getter": "byteLength"
+                    },
+                    {
+                      "name": {
+                        "name": "byteOffset"
+                      },
+                      "type": {
+                        "kind": 12
+                      },
+                      "getter": "byteOffset"
+                    },
+                    {
+                      "name": {
+                        "name": "buffer"
+                      },
+                      "type": {
+                        "kind": 2,
+                        "isa": {
+                          "base": {
+                            "name": {
+                              "name": "Object"
+                            },
+                            "properties": [
+                              {
+                                "name": {
+                                  "name": "retainCount"
+                                },
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ],
+                            "methods": [
+                              {
+                                "name": {
+                                  "name": "hashCode"
+                                },
+                                "returnType": {
+                                  "kind": 15
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "compare"
+                                },
+                                "returnType": {
+                                  "kind": 14
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "v",
+                                    "type": {
+                                      "kind": 2
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "name": {
+                                  "name": "toString"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toInt64"
+                                },
+                                "returnType": {
+                                  "kind": 10
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toFloat64"
+                                },
+                                "returnType": {
+                                  "kind": 17
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toBoolean"
+                                },
+                                "returnType": {
+                                  "kind": 18
+                                },
+                                "arguments": []
+                              }
+                            ]
+                          },
+                          "name": {
+                            "name": "ArrayBuffer"
+                          },
+                          "new": {
+                            "name": {
+                              "name": "new"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": [
+                              {
+                                "name": "length",
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ]
+                          },
+                          "properties": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "type": {
+                                "kind": 12
+                              },
+                              "getter": "byteLength"
+                            }
+                          ],
+                          "methods": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "returnType": {
+                                "kind": 12
+                              },
+                              "arguments": []
+                            }
+                          ]
+                        }
+                      },
+                      "getter": "buffer"
+                    }
+                  ],
+                  "methods": [
+                    {
+                      "name": {
+                        "name": "byteLength"
+                      },
+                      "returnType": {
+                        "kind": 12
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "name": {
+                        "name": "byteOffset"
+                      },
+                      "returnType": {
+                        "kind": 12
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "name": {
+                        "name": "buffer"
+                      },
+                      "returnType": {
+                        "kind": 2,
+                        "isa": {
+                          "base": {
+                            "name": {
+                              "name": "Object"
+                            },
+                            "properties": [
+                              {
+                                "name": {
+                                  "name": "retainCount"
+                                },
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ],
+                            "methods": [
+                              {
+                                "name": {
+                                  "name": "hashCode"
+                                },
+                                "returnType": {
+                                  "kind": 15
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "compare"
+                                },
+                                "returnType": {
+                                  "kind": 14
+                                },
+                                "arguments": [
+                                  {
+                                    "name": "v",
+                                    "type": {
+                                      "kind": 2
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "name": {
+                                  "name": "toString"
+                                },
+                                "returnType": {
+                                  "kind": 2
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toInt64"
+                                },
+                                "returnType": {
+                                  "kind": 10
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toFloat64"
+                                },
+                                "returnType": {
+                                  "kind": 17
+                                },
+                                "arguments": []
+                              },
+                              {
+                                "name": {
+                                  "name": "toBoolean"
+                                },
+                                "returnType": {
+                                  "kind": 18
+                                },
+                                "arguments": []
+                              }
+                            ]
+                          },
+                          "name": {
+                            "name": "ArrayBuffer"
+                          },
+                          "new": {
+                            "name": {
+                              "name": "new"
+                            },
+                            "returnType": {
+                              "kind": 2
+                            },
+                            "arguments": [
+                              {
+                                "name": "length",
+                                "type": {
+                                  "kind": 12
+                                }
+                              }
+                            ]
+                          },
+                          "properties": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "type": {
+                                "kind": 12
+                              },
+                              "getter": "byteLength"
+                            }
+                          ],
+                          "methods": [
+                            {
+                              "name": {
+                                "name": "byteLength"
+                              },
+                              "returnType": {
+                                "kind": 12
+                              },
+                              "arguments": []
+                            }
+                          ]
+                        }
+                      },
+                      "arguments": []
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "title": "",
+          "tags": []
+        }
+      ],
+      "title": "",
+      "tags": []
+    }
+  }
+}

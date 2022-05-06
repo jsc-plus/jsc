@@ -58,6 +58,9 @@
   },
   "files": [
     "../typing/jsc.d.ts",
+    "../typing/fs.jsc.d.ts",
+    "../typing/crypto.jsc.d.ts",
+    "../typing/net.jsc.d.ts"
   ],
   "include": [
     "**/*.ts"

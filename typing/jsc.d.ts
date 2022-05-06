@@ -101,24 +101,10 @@ declare namespace jsc {
      */
     type weak = any
 
-    class Class {
-        readonly isa?: Class
-        readonly name: string
-        readonly size: int
-        isKindOf(isa?: Class): boolean
-    }
-
-    class Object {
-        readonly isa: Class
-        readonly retainCount: int
-        isKindOf(isa?: Class): boolean
-        toString(): string
-        hashCode(): ulong
-        compare(b: Object): long
-        toInt64(): int64
-        toFloat64(): float64
-        toBoolean(): boolean
-    }
+    /**
+     * C 字符串
+     */
+    type CString = string
 
     function log(format: string, ...args: any[]): void
 

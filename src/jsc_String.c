@@ -759,6 +759,25 @@ struct jsc_String_t * jsc_String_allocUString(jsc_unichar_t * str, jsc_int_t len
     return v;
 }
 
+struct jsc_String_t * jsc_String_allocFormat(jsc_string_t format,...) {
+    jsc_buffer_t buf;
+    jsc_buffer_init(&buf);
+    
+    va_list ap;
+    va_start(ap, format);
+    size_t n = vsnprintf(NULL, 0, format, ap);
+    va_end(ap);
+    va_start(ap, format);
+    jsc_string_t v = jsc_buffer_formatv(&buf, format, ap, n);
+    va_end(ap);
+    
+    struct jsc_String_t * s = jsc_String_allocCString(v);
+    
+    jsc_buffer_destory(&buf);
+    
+    return s;
+}
+
 struct jsc_String_t * jsc_String_newCString(jsc_string_t s) {
     jsc_String_t * v = jsc_String_allocCString(s);
     jsc_object_autorelease((jsc_object_t *) v);
@@ -783,6 +802,25 @@ struct jsc_String_t * jsc_String_newUString(jsc_unichar_t * s, jsc_int_t length)
     return v;
 }
 
+
+struct jsc_String_t * jsc_String_newFormat(jsc_string_t format,...) {
+    jsc_buffer_t buf;
+    jsc_buffer_init(&buf);
+    
+    va_list ap;
+    va_start(ap, format);
+    size_t n = vsnprintf(NULL, 0, format, ap);
+    va_end(ap);
+    va_start(ap, format);
+    jsc_string_t v = jsc_buffer_formatv(&buf, format, ap, n);
+    va_end(ap);
+    
+    struct jsc_String_t * s = jsc_String_newCString(v);
+    
+    jsc_buffer_destory(&buf);
+    
+    return s;
+}
 
 size_t jsc_String_iconv(jsc_string_t toCharset,jsc_string_t fromCharset,jsc_byte_t * inBytes,size_t inLen,struct jsc_buffer_t * dst) {
     size_t v = dst->length;
@@ -830,3 +868,22 @@ jsc_long_t jsc_string_compare(jsc_string_t a,jsc_string_t b) {
     return strcmp(a, b);
 }
 
+
+struct jsc_String_t * jsc_string_concat(jsc_string_t a,jsc_string_t b) {
+    jsc_buffer_t buf;
+    jsc_buffer_init(&buf);
+    
+    if(a) {
+        jsc_buffer_format(&buf, "%s",a);
+    }
+    
+    if(b) {
+        jsc_buffer_format(&buf, "%s",b);
+    }
+    
+    struct jsc_String_t * s = jsc_String_newUTF8String(buf.data, (jsc_int_t) buf.length);
+    
+    jsc_buffer_destory(&buf);
+    
+    return s;
+}

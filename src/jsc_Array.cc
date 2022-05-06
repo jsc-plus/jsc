@@ -564,7 +564,7 @@ static struct jsc_String_t * _jsc_Array_join(jsc_class_t * isa, jsc_object_t * o
         if(n != 0) {
             jsc_buffer_format(&buf, "%s",separator);
         }
-        jsc_variant_toCString(*i, &buf);
+        jsc_variant_toCStringWithBuffer(*i, &buf);
         n ++;
         i ++;
     }

@@ -183,10 +183,10 @@ void jsc_object_unWeak(jsc_object_t * v, jsc_object_t ** dst) {
     
 }
 
-void jsc_setStrong(jsc_object_t ** dst, jsc_object_t * src) {
+jsc_object_t * jsc_setStrong(jsc_object_t ** dst, jsc_object_t * src) {
     
     if(!dst) {
-        return;
+        return src;
     }
     
     if(* dst != src) {
@@ -194,12 +194,14 @@ void jsc_setStrong(jsc_object_t ** dst, jsc_object_t * src) {
         jsc_object_release(*dst);
         * dst = src;
     }
+    
+    return src;
 }
 
-void jsc_setWeak(jsc_object_t ** dst, jsc_object_t * src) {
+jsc_object_t * jsc_setWeak(jsc_object_t ** dst, jsc_object_t * src) {
     
     if(!dst) {
-        return;
+        return src;
     }
     
     if(* dst != src) {
@@ -208,6 +210,7 @@ void jsc_setWeak(jsc_object_t ** dst, jsc_object_t * src) {
         * dst = src;
     }
     
+    return src;
 }
 
 
