@@ -619,3 +619,19 @@ static const struct jsc_IteratorEntity_t * _jsc_ArrayIterator_next(jsc_class_t *
     }
     return NULL;
 }
+
+
+jsc_object_t * jsc_Array_add(jsc_object_t * object,struct jsc_variant_t v) {
+    
+    if(object == NULL) {
+        return NULL;
+    }
+    
+    if(!jsc_class_isKind(object->isa, (jsc_class_t *)&jsc_Array)) {
+        return NULL;
+    }
+    
+    jsc_Array_push(object, v);
+    
+    return object;
+}

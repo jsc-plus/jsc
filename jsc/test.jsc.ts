@@ -49,4 +49,10 @@ export function main() {
     jsc.log("b.test %s %d >>", b, ++i)
     b.test();
 
+    let done = ()=>{
+        a.test();
+        b.test();
+    };
+
+    done();
 }

@@ -1,6 +1,8 @@
 #include "jsc.h"
 #include "test.h"
 static jsc_object_t * jsc__dir = NULL ;
+typedef void (*jsc_closures_declare_0_2_t)(jsc_object_t * __closures);
+static void jsc_closures_4(jsc_object_t * __closures);
 typedef void (*jsc_A_test_t)(jsc_class_t * __isa,jsc_object_t * __object);
 typedef struct jsc_A_class_t {
 	jsc_class_t base;

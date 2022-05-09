@@ -25,6 +25,19 @@
 		AC4529E42796BB61007ACCCF /* jsc_buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4529E22796BB61007ACCCF /* jsc_buffer.h */; };
 		AC4529E52796BB61007ACCCF /* jsc_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529E32796BB61007ACCCF /* jsc_buffer.c */; };
 		AC4529E62796BB61007ACCCF /* jsc_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = AC4529E32796BB61007ACCCF /* jsc_buffer.c */; };
+		AC9412A82825FA1800EC03C3 /* sr.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412A52825FA1800EC03C3 /* sr.c */; };
+		AC9412C12827873500EC03C3 /* jsc_Typeof.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412BE2827873400EC03C3 /* jsc_Typeof.c */; };
+		AC9412C22827873500EC03C3 /* jsc_Typeof.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412BE2827873400EC03C3 /* jsc_Typeof.c */; };
+		AC9412C32827873500EC03C3 /* jsc_Typeof.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412BE2827873400EC03C3 /* jsc_Typeof.c */; };
+		AC9412C42827873500EC03C3 /* jsc_Typeof.h in Headers */ = {isa = PBXBuildFile; fileRef = AC9412BF2827873400EC03C3 /* jsc_Typeof.h */; };
+		AC9412CB2827929700EC03C3 /* jsc_Math.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412C82827929700EC03C3 /* jsc_Math.c */; };
+		AC9412CC2827929700EC03C3 /* jsc_Math.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412C82827929700EC03C3 /* jsc_Math.c */; };
+		AC9412CD2827929700EC03C3 /* jsc_Math.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412C82827929700EC03C3 /* jsc_Math.c */; };
+		AC9412CE2827929700EC03C3 /* jsc_Math.h in Headers */ = {isa = PBXBuildFile; fileRef = AC9412C92827929700EC03C3 /* jsc_Math.h */; };
+		AC9412D42827FC3C00EC03C3 /* jsc_Closures.h in Headers */ = {isa = PBXBuildFile; fileRef = AC9412D22827FC3C00EC03C3 /* jsc_Closures.h */; };
+		AC9412D52827FC3C00EC03C3 /* jsc_Closures.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412D32827FC3C00EC03C3 /* jsc_Closures.c */; };
+		AC9412D62827FC3C00EC03C3 /* jsc_Closures.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412D32827FC3C00EC03C3 /* jsc_Closures.c */; };
+		AC9412D72827FC3C00EC03C3 /* jsc_Closures.c in Sources */ = {isa = PBXBuildFile; fileRef = AC9412D32827FC3C00EC03C3 /* jsc_Closures.c */; };
 		AC97D10B2820CF8D00D610A7 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AC97D10A2820CF8D00D610A7 /* libiconv.tbd */; };
 		AC97D10E2820DEC700D610A7 /* jsc_Number.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D10C2820DEC700D610A7 /* jsc_Number.h */; };
 		AC97D10F2820DEC700D610A7 /* jsc_Number.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D10D2820DEC700D610A7 /* jsc_Number.c */; };
@@ -59,7 +72,6 @@
 		AC97D1482823615100D610A7 /* jsc_DataView.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D126282203CE00D610A7 /* jsc_DataView.c */; };
 		AC97D1492823615100D610A7 /* jsc_Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = AC4529D92791276A007ACCCF /* jsc_Array.cc */; };
 		AC97D14A2823640C00D610A7 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AC97D10A2820CF8D00D610A7 /* libiconv.tbd */; };
-		AC97D1562823FDCA00D610A7 /* test.inc in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1552823FDCA00D610A7 /* test.inc */; };
 		AC97D15D2824C51700D610A7 /* jsc_fs.h in Headers */ = {isa = PBXBuildFile; fileRef = AC97D1582824C51600D610A7 /* jsc_fs.h */; };
 		AC97D15E2824C51700D610A7 /* jsc_fs.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1592824C51600D610A7 /* jsc_fs.c */; };
 		AC97D15F2824C51700D610A7 /* jsc_fs.c in Sources */ = {isa = PBXBuildFile; fileRef = AC97D1592824C51600D610A7 /* jsc_fs.c */; };
@@ -111,6 +123,17 @@
 		AC4529DE27951236007ACCCF /* jsc_String.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_String.c; sourceTree = "<group>"; };
 		AC4529E22796BB61007ACCCF /* jsc_buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_buffer.h; sourceTree = "<group>"; };
 		AC4529E32796BB61007ACCCF /* jsc_buffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_buffer.c; sourceTree = "<group>"; };
+		AC9412A52825FA1800EC03C3 /* sr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sr.c; sourceTree = "<group>"; };
+		AC9412A62825FA1800EC03C3 /* sr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sr.h; sourceTree = "<group>"; };
+		AC9412A72825FA1800EC03C3 /* sr.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = sr.inc; sourceTree = "<group>"; };
+		AC9412BE2827873400EC03C3 /* jsc_Typeof.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsc_Typeof.c; sourceTree = "<group>"; };
+		AC9412BF2827873400EC03C3 /* jsc_Typeof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_Typeof.h; sourceTree = "<group>"; };
+		AC9412C02827873500EC03C3 /* jsc_Typeof.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = jsc_Typeof.inc; sourceTree = "<group>"; };
+		AC9412C82827929700EC03C3 /* jsc_Math.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jsc_Math.c; sourceTree = "<group>"; };
+		AC9412C92827929700EC03C3 /* jsc_Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_Math.h; sourceTree = "<group>"; };
+		AC9412CA2827929700EC03C3 /* jsc_Math.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = jsc_Math.inc; sourceTree = "<group>"; };
+		AC9412D22827FC3C00EC03C3 /* jsc_Closures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Closures.h; sourceTree = "<group>"; };
+		AC9412D32827FC3C00EC03C3 /* jsc_Closures.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_Closures.c; sourceTree = "<group>"; };
 		AC97D10A2820CF8D00D610A7 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
 		AC97D10C2820DEC700D610A7 /* jsc_Number.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsc_Number.h; sourceTree = "<group>"; };
 		AC97D10D2820DEC700D610A7 /* jsc_Number.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsc_Number.c; sourceTree = "<group>"; };
@@ -130,7 +153,7 @@
 		AC97D1382823612900D610A7 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		AC97D1392823612900D610A7 /* tsconfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tsconfig.json; sourceTree = "<group>"; };
 		AC97D13A2823612900D610A7 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
-		AC97D13B2823612900D610A7 /* test.jsc.ts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.jsc.ts; sourceTree = "<group>"; };
+		AC97D13B2823612900D610A7 /* test.jsc.ts */ = {isa = PBXFileReference; explicitFileType = sourcecode.javascript; fileEncoding = 4; path = test.jsc.ts; sourceTree = "<group>"; };
 		AC97D1552823FDCA00D610A7 /* test.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = test.inc; sourceTree = "<group>"; };
 		AC97D1572824C51600D610A7 /* jsc_fs.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; path = jsc_fs.inc; sourceTree = "<group>"; };
 		AC97D1582824C51600D610A7 /* jsc_fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jsc_fs.h; sourceTree = "<group>"; };
@@ -226,6 +249,8 @@
 				AC97D1212822002500D610A7 /* jsc_ArrayBuffer.c */,
 				AC97D125282203CE00D610A7 /* jsc_DataView.h */,
 				AC97D126282203CE00D610A7 /* jsc_DataView.c */,
+				AC9412D22827FC3C00EC03C3 /* jsc_Closures.h */,
+				AC9412D32827FC3C00EC03C3 /* jsc_Closures.c */,
 				AC97D1592824C51600D610A7 /* jsc_fs.c */,
 				AC97D1582824C51600D610A7 /* jsc_fs.h */,
 				AC97D1572824C51600D610A7 /* jsc_fs.inc */,
@@ -235,6 +260,12 @@
 				AC97D16B2824E2E200D610A7 /* jsc_net.c */,
 				AC97D16D2824E2E300D610A7 /* jsc_net.h */,
 				AC97D16C2824E2E300D610A7 /* jsc_net.inc */,
+				AC9412BE2827873400EC03C3 /* jsc_Typeof.c */,
+				AC9412BF2827873400EC03C3 /* jsc_Typeof.h */,
+				AC9412C02827873500EC03C3 /* jsc_Typeof.inc */,
+				AC9412C82827929700EC03C3 /* jsc_Math.c */,
+				AC9412C92827929700EC03C3 /* jsc_Math.h */,
+				AC9412CA2827929700EC03C3 /* jsc_Math.inc */,
 				AC97D12A282271E500D610A7 /* jsc.h */,
 			);
 			name = src;
@@ -268,6 +299,9 @@
 		AC97D1362823612900D610A7 /* jsc */ = {
 			isa = PBXGroup;
 			children = (
+				AC9412A52825FA1800EC03C3 /* sr.c */,
+				AC9412A62825FA1800EC03C3 /* sr.h */,
+				AC9412A72825FA1800EC03C3 /* sr.inc */,
 				AC97D1372823612900D610A7 /* test.h */,
 				AC97D1552823FDCA00D610A7 /* test.inc */,
 				AC97D1382823612900D610A7 /* main.c */,
@@ -293,8 +327,11 @@
 				AC4529DA2791276A007ACCCF /* jsc_Array.h in Headers */,
 				AC97D1742824E2E300D610A7 /* jsc_net.h in Headers */,
 				AC97D1222822002500D610A7 /* jsc_ArrayBuffer.h in Headers */,
+				AC9412C42827873500EC03C3 /* jsc_Typeof.h in Headers */,
 				AC97D127282203CE00D610A7 /* jsc_DataView.h in Headers */,
+				AC9412CE2827929700EC03C3 /* jsc_Math.h in Headers */,
 				AC4529E42796BB61007ACCCF /* jsc_buffer.h in Headers */,
+				AC9412D42827FC3C00EC03C3 /* jsc_Closures.h in Headers */,
 				AC4529BF278E733D007ACCCF /* jsc_class.h in Headers */,
 				AC97D1182820FBF500D610A7 /* jsc_Iterator.h in Headers */,
 				AC97D10E2820DEC700D610A7 /* jsc_Number.h in Headers */,
@@ -415,9 +452,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC9412D52827FC3C00EC03C3 /* jsc_Closures.c in Sources */,
 				AC97D16E2824E2E300D610A7 /* jsc_net.c in Sources */,
 				AC4529E52796BB61007ACCCF /* jsc_buffer.c in Sources */,
 				AC97D1132820E7EF00D610A7 /* jsc_Map.cc in Sources */,
+				AC9412C12827873500EC03C3 /* jsc_Typeof.c in Sources */,
 				AC4529C0278E733D007ACCCF /* jsc_class.c in Sources */,
 				AC97D15E2824C51700D610A7 /* jsc_fs.c in Sources */,
 				AC97D1232822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
@@ -427,6 +466,7 @@
 				AC97D128282203CE00D610A7 /* jsc_DataView.c in Sources */,
 				AC97D1192820FBF600D610A7 /* jsc_Iterator.c in Sources */,
 				AC97D11D28210B4C00D610A7 /* jsc_Set.cc in Sources */,
+				AC9412CB2827929700EC03C3 /* jsc_Math.c in Sources */,
 				AC4529CE278E7700007ACCCF /* jsc_log.c in Sources */,
 				AC97D1672824C52800D610A7 /* jsc_crypto.c in Sources */,
 				AC4529E027951236007ACCCF /* jsc_String.c in Sources */,
@@ -437,6 +477,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC9412C22827873500EC03C3 /* jsc_Typeof.c in Sources */,
+				AC9412CC2827929700EC03C3 /* jsc_Math.c in Sources */,
 				AC97D16F2824E2E300D610A7 /* jsc_net.c in Sources */,
 				AC4529DC2791276A007ACCCF /* jsc_Array.cc in Sources */,
 				AC4529E127951236007ACCCF /* jsc_String.c in Sources */,
@@ -448,6 +490,7 @@
 				AC97D1242822002500D610A7 /* jsc_ArrayBuffer.c in Sources */,
 				AC97D129282203CE00D610A7 /* jsc_DataView.c in Sources */,
 				AC97D1152820ED0500D610A7 /* jsc_Map.cc in Sources */,
+				AC9412D62827FC3C00EC03C3 /* jsc_Closures.c in Sources */,
 				AC97D11F28210B4E00D610A7 /* jsc_Set.cc in Sources */,
 				AC97D1682824C52800D610A7 /* jsc_crypto.c in Sources */,
 				AC97D1102820E1E700D610A7 /* jsc_Number.c in Sources */,
@@ -460,15 +503,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC97D1562823FDCA00D610A7 /* test.inc in Sources */,
+				AC9412D72827FC3C00EC03C3 /* jsc_Closures.c in Sources */,
 				AC97D1442823615100D610A7 /* jsc_Number.c in Sources */,
 				AC97D1692824C52800D610A7 /* jsc_crypto.c in Sources */,
 				AC97D1412823615100D610A7 /* jsc_ArrayBuffer.c in Sources */,
 				AC97D1422823615100D610A7 /* jsc_Iterator.c in Sources */,
 				AC97D1472823615100D610A7 /* jsc_log.c in Sources */,
 				AC97D1702824E2E300D610A7 /* jsc_net.c in Sources */,
+				AC9412C32827873500EC03C3 /* jsc_Typeof.c in Sources */,
 				AC97D1452823615100D610A7 /* jsc_Set.cc in Sources */,
 				AC97D13C2823612900D610A7 /* main.c in Sources */,
+				AC9412CD2827929700EC03C3 /* jsc_Math.c in Sources */,
 				AC97D1432823615100D610A7 /* jsc_String.c in Sources */,
 				AC97D1482823615100D610A7 /* jsc_DataView.c in Sources */,
 				AC97D1602824C51700D610A7 /* jsc_fs.c in Sources */,
@@ -477,6 +522,7 @@
 				AC97D13D2823612900D610A7 /* test.c in Sources */,
 				AC97D1402823615100D610A7 /* jsc_buffer.c in Sources */,
 				AC97D1492823615100D610A7 /* jsc_Array.cc in Sources */,
+				AC9412A82825FA1800EC03C3 /* sr.c in Sources */,
 				AC97D1462823615100D610A7 /* jsc_variant.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

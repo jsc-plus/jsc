@@ -7,7 +7,7 @@
         "jsc": "dist/main.js"
     },
     "scripts": {
-        "build": "tsc"
+        "build": "tsc && rm -rf ./dist/C/jsc.d.ts.json && cp -R -f ./src/C/jsc.d.ts.json ./dist/C/jsc.d.ts.json"
     },
     "author": "hailongz@qq.com",
     "license": "BSD 3-Clause License",

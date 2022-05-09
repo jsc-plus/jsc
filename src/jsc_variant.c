@@ -8,9 +8,9 @@
 
 #include "jsc_type.h"
 #include "jsc_class.h"
-#include "jsc_variant.h"
 #include "jsc_buffer.h"
 #include "jsc_String.h"
+#include "jsc_variant.h"
 #include "jsc_Number.h"
 #include <zlib.h>
 
@@ -193,67 +193,62 @@ jsc_string_t jsc_variant_toCString(struct jsc_variant_t v) {
     return NULL;
 }
 
-jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v) {
-    switch (v.type) {
-        case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_INT8:
-        case JSC_VARIANT_TYPE_UINT8:
-        case JSC_VARIANT_TYPE_INT16:
-        case JSC_VARIANT_TYPE_UINT16:
-        case JSC_VARIANT_TYPE_INT32:
-        case JSC_VARIANT_TYPE_UINT32:
-        case JSC_VARIANT_TYPE_INT64:
-        case JSC_VARIANT_TYPE_INT:
-        case JSC_VARIANT_TYPE_UINT:
-        case JSC_VARIANT_TYPE_LONG:
-        case JSC_VARIANT_TYPE_ULONG:
-        case JSC_VARIANT_TYPE_BOOLEAN:
-        case JSC_VARIANT_TYPE_UNICHAR:
-            return (jsc_float64_t) v.int64Value;
-        case JSC_VARIANT_TYPE_UINT64:
-            return (jsc_float64_t) v.uint64Value;
-        case JSC_VARIANT_TYPE_FLOAT32:
-            return (jsc_float64_t) v.float32Value;
-        case JSC_VARIANT_TYPE_FLOAT64:
-            return (jsc_float64_t) v.float64Value;
-        case JSC_VARIANT_TYPE_STRING:
-            return atof(v.stringValue);
-        case JSC_VARIANT_TYPE_OBJECT:
-            return jsc_object_toFloat64(v.objectValue);
-    }
-    return 0;
+#define IMP_TYPE_TO(FUNC,TYPE,ATOT,OT) \
+TYPE jsc_variant_##FUNC(struct jsc_variant_t v) {\
+    switch (v.type) {\
+        case JSC_VARIANT_TYPE_NIL:\
+            return 0;\
+        case JSC_VARIANT_TYPE_INT8:\
+            return (TYPE) v.int8Value;\
+        case JSC_VARIANT_TYPE_UINT8:\
+            return (TYPE) v.uint8Value;\
+        case JSC_VARIANT_TYPE_INT16:\
+            return (TYPE) v.int16Value;\
+        case JSC_VARIANT_TYPE_UINT16:\
+            return (TYPE) v.uint16Value;\
+        case JSC_VARIANT_TYPE_INT32:\
+            return (TYPE) v.int32Value;\
+        case JSC_VARIANT_TYPE_UINT32:\
+            return (TYPE) v.uint32Value;\
+        case JSC_VARIANT_TYPE_INT:\
+            return (TYPE) v.intValue;\
+        case JSC_VARIANT_TYPE_UINT:\
+            return (TYPE) v.uintValue;\
+        case JSC_VARIANT_TYPE_LONG:\
+            return (TYPE) v.longValue;\
+        case JSC_VARIANT_TYPE_ULONG:\
+            return (TYPE) v.ulongValue;\
+        case JSC_VARIANT_TYPE_BOOLEAN:\
+            return (TYPE) v.booleanValue;\
+        case JSC_VARIANT_TYPE_UNICHAR:\
+            return (TYPE) v.unicharValue;\
+        case JSC_VARIANT_TYPE_INT64:\
+            return (TYPE) v.int64Value;\
+        case JSC_VARIANT_TYPE_UINT64:\
+            return (TYPE) v.uint64Value;\
+        case JSC_VARIANT_TYPE_FLOAT32:\
+            return (TYPE) v.float32Value;\
+        case JSC_VARIANT_TYPE_FLOAT64:\
+            return (TYPE) v.float64Value;\
+        case JSC_VARIANT_TYPE_STRING:\
+            return (TYPE) ATOT(v.stringValue);\
+        case JSC_VARIANT_TYPE_OBJECT:\
+            return (TYPE) jsc_object_##OT(v.objectValue);\
+    }\
+    return 0;\
 }
 
-jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v) {
-    switch (v.type) {
-        case JSC_VARIANT_TYPE_NIL:
-        case JSC_VARIANT_TYPE_INT8:
-        case JSC_VARIANT_TYPE_UINT8:
-        case JSC_VARIANT_TYPE_INT16:
-        case JSC_VARIANT_TYPE_UINT16:
-        case JSC_VARIANT_TYPE_INT32:
-        case JSC_VARIANT_TYPE_UINT32:
-        case JSC_VARIANT_TYPE_INT64:
-        case JSC_VARIANT_TYPE_INT:
-        case JSC_VARIANT_TYPE_UINT:
-        case JSC_VARIANT_TYPE_LONG:
-        case JSC_VARIANT_TYPE_ULONG:
-        case JSC_VARIANT_TYPE_BOOLEAN:
-        case JSC_VARIANT_TYPE_UNICHAR:
-            return v.int64Value;
-        case JSC_VARIANT_TYPE_UINT64:
-            return (jsc_int64_t) v.uint64Value;
-        case JSC_VARIANT_TYPE_FLOAT32:
-            return (jsc_int64_t) v.float32Value;
-        case JSC_VARIANT_TYPE_FLOAT64:
-            return (jsc_int64_t) v.float64Value;
-        case JSC_VARIANT_TYPE_STRING:
-            return atoll(v.stringValue);
-        case JSC_VARIANT_TYPE_OBJECT:
-            return jsc_object_toInt64(v.objectValue);
-    }
-    return 0;
-}
+IMP_TYPE_TO(toInt8,jsc_int8_t,atoi,toInt64)
+IMP_TYPE_TO(toUint8,jsc_uint8_t,atoi,toInt64)
+IMP_TYPE_TO(toInt16,jsc_int16_t,atoi,toInt64)
+IMP_TYPE_TO(toUint16,jsc_uint16_t,atoi,toInt64)
+IMP_TYPE_TO(toInt32,jsc_int32_t,atoi,toInt64)
+IMP_TYPE_TO(toUint32,jsc_uint32_t,atoi,toInt64)
+IMP_TYPE_TO(toInt64,jsc_int64_t,atoll,toInt64)
+IMP_TYPE_TO(toUint64,jsc_uint64_t,atoll,toInt64)
+IMP_TYPE_TO(toFloat32,jsc_float32_t,atof,toFloat64)
+IMP_TYPE_TO(toFloat64,jsc_float64_t,atof,toFloat64)
+
 
 jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v) {
     switch (v.type) {
@@ -332,7 +327,8 @@ jsc_long_t jsc_variant_compare(struct jsc_variant_t a,struct jsc_variant_t b) {
         jsc_long_t r = jsc_string_compare(as,bs);
         jsc_buffer_destory(&buf);
         return r;
-    } else if(at == JSC_VARIANT_TYPE_FLOAT64 || bt == JSC_VARIANT_TYPE_FLOAT64) {
+    } else if(at == JSC_VARIANT_TYPE_FLOAT64 || bt == JSC_VARIANT_TYPE_FLOAT64
+              || at == JSC_VARIANT_TYPE_FLOAT32 || bt == JSC_VARIANT_TYPE_FLOAT32) {
         jsc_float64_t r = jsc_variant_toFloat64(a) - jsc_variant_toFloat64(b);
         if(r == 0.0) {
             return 0;
@@ -423,9 +419,87 @@ void jsc_variant_setStrong(struct jsc_variant_t * a,struct jsc_variant_t v) {
     jsc_setStrong(&a->objectValue, v.objectValue);
 }
 
+void jsc_variant_setWeak(struct jsc_variant_t * a,struct jsc_variant_t v) {
+    a->type = v.type;
+    a->uint64Value = v.uint64Value;
+    jsc_setWeak(&a->objectValue, v.objectValue);
+}
+
 struct jsc_variant_t jsc_variant_getStrong(struct jsc_variant_t v) {
     struct jsc_variant_t r = jsc_Nil;
     jsc_variant_setStrong(&r,v);
     return r;
+}
+
+
+jsc_long_t jsc_variant_strict_compare(struct jsc_variant_t a, struct jsc_variant_t b) {
+    jsc_long_t r = a.type - b.type;
+    if(r == 0) {
+        return jsc_variant_compare(a,b);
+    }
+    return r;
+}
+
+jsc_variant_t jsc_variant_add(struct jsc_variant_t a, struct jsc_variant_t b) {
+    if(a.type == JSC_VARIANT_TYPE_STRING || b.type == JSC_VARIANT_TYPE_STRING) {
+        jsc_String_t * s = jsc_string_concat(jsc_variant_toCString(a),jsc_variant_toCString(b));
+        struct jsc_variant_t r = jsc_Nil;
+        r.type = JSC_VARIANT_TYPE_STRING;
+        r.stringValue = jsc_String_CString((jsc_object_t *) s);
+        r.objectValue = (jsc_object_t *) s;
+        return r;
+    } else if(a.type == JSC_VARIANT_TYPE_FLOAT32 || a.type == JSC_VARIANT_TYPE_FLOAT32
+              || a.type == JSC_VARIANT_TYPE_FLOAT64 || a.type == JSC_VARIANT_TYPE_FLOAT64) {
+        return jsc_variant_float64(jsc_variant_toFloat64(a) + jsc_variant_toFloat64(b));
+    } else {
+        return jsc_variant_int64(jsc_variant_toInt64(a) + jsc_variant_toInt64(b));
+    }
+}
+
+jsc_variant_t jsc_variant_sub(struct jsc_variant_t a, struct jsc_variant_t b) {
+    if(a.type == JSC_VARIANT_TYPE_FLOAT32 || a.type == JSC_VARIANT_TYPE_FLOAT32
+              || a.type == JSC_VARIANT_TYPE_FLOAT64 || a.type == JSC_VARIANT_TYPE_FLOAT64) {
+        return jsc_variant_float64(jsc_variant_toFloat64(a) - jsc_variant_toFloat64(b));
+    } else {
+        return jsc_variant_int64(jsc_variant_toInt64(a) - jsc_variant_toInt64(b));
+    }
+}
+
+jsc_variant_t jsc_variant_mul(struct jsc_variant_t a, struct jsc_variant_t b) {
+    if(a.type == JSC_VARIANT_TYPE_FLOAT32 || a.type == JSC_VARIANT_TYPE_FLOAT32
+              || a.type == JSC_VARIANT_TYPE_FLOAT64 || a.type == JSC_VARIANT_TYPE_FLOAT64) {
+        return jsc_variant_float64(jsc_variant_toFloat64(a) * jsc_variant_toFloat64(b));
+    } else {
+        return jsc_variant_int64(jsc_variant_toInt64(a) * jsc_variant_toInt64(b));
+    }
+}
+
+jsc_variant_t jsc_variant_div(struct jsc_variant_t a, struct jsc_variant_t b) {
+    if(a.type == JSC_VARIANT_TYPE_FLOAT32 || a.type == JSC_VARIANT_TYPE_FLOAT32
+              || a.type == JSC_VARIANT_TYPE_FLOAT64 || a.type == JSC_VARIANT_TYPE_FLOAT64) {
+        return jsc_variant_float64(jsc_variant_toFloat64(a) / jsc_variant_toFloat64(b));
+    } else {
+        return jsc_variant_int64(jsc_variant_toInt64(a) / jsc_variant_toInt64(b));
+    }
+}
+
+jsc_variant_t jsc_variant_mod(struct jsc_variant_t a, struct jsc_variant_t b) {
+    return jsc_variant_int64(jsc_variant_toInt64(a) % jsc_variant_toInt64(b));
+}
+
+jsc_variant_t jsc_variant_bit_and(struct jsc_variant_t a, struct jsc_variant_t b) {
+    return jsc_variant_int64(jsc_variant_toInt64(a) & jsc_variant_toInt64(b));
+}
+
+jsc_variant_t jsc_variant_bit_or(struct jsc_variant_t a, struct jsc_variant_t b) {
+    return jsc_variant_int64(jsc_variant_toInt64(a) | jsc_variant_toInt64(b));
+}
+
+jsc_variant_t jsc_variant_bit_xor(struct jsc_variant_t a, struct jsc_variant_t b) {
+    return jsc_variant_int64(jsc_variant_toInt64(a) ^ jsc_variant_toInt64(b));
+}
+
+jsc_variant_t jsc_variant_bit_opp(struct jsc_variant_t a) {
+    return jsc_variant_int64(~jsc_variant_toInt64(a));
 }
 

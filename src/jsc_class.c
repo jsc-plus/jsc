@@ -224,6 +224,13 @@ jsc_boolean_t jsc_class_isKind(jsc_class_t * isa, jsc_class_t * dst) {
     return 0;
 }
 
+jsc_boolean_t jsc_object_isKind(jsc_object_t * v, jsc_class_t * dst) {
+    if(v == NULL) {
+        return 0;
+    }
+    return jsc_class_isKind(v->isa,dst);
+}
+
 
 /* autorelease */
 jsc_object_t * jsc_object_new(jsc_class_t * isa,jsc_int_t extraSize) {

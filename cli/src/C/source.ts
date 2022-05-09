@@ -1,5 +1,5 @@
 import { baseClassSet } from "./base";
-import { Doc, Module, Symbol, Function, Type, Argument, ModuleName, Method, Class, TypeKind } from "./types"
+import { Doc, Module, Symbol, Function, Type, Argument, ModuleName, Method, Class, TypeKind, ClosuresDeclare } from "./types"
 
 export interface Source {
     include_h: string;
@@ -138,11 +138,6 @@ export function toType(t: Type): string {
             return "jsc_object_t *";
         case TypeKind.VARIANT:
             return "jsc_variant_t";
-        case TypeKind.PTR:
-            if (t.func) {
-                return toFunctionType(t.func)
-            }
-            return "jsc_ptr_t";
     }
     return "void"
 }
@@ -172,8 +167,6 @@ export function toTypeDefaultValue(t: Type): string {
             return "NULL";
         case TypeKind.VARIANT:
             return "jsc_Nil";
-        case TypeKind.PTR:
-            return "NULL";
     }
     return ""
 }
@@ -181,11 +174,7 @@ export function toTypeDefaultValue(t: Type): string {
 export function toArgumentsDefinition(args: Argument[], vs: string[] = ['']): string {
     if (args.length > 0) {
         for (let a of args) {
-            if (a.type.kind == TypeKind.PTR && a.type.func) {
-                vs.push(toFunctionType(a.type.func, a.name))
-            } else {
-                vs.push(`${toType(a.type)} ${a.name}`)
-            }
+            vs.push(`${toType(a.type)}${a.type.closures?` /* jsc_${toSymbolName(a.type.closures.name)}_t */`:''} ${a.name}`)
         }
     }
     return vs.join(', ')
@@ -208,6 +197,22 @@ export function toFunctionDefinition(v: Function): string {
     vs.push(" jsc_")
     vs.push(toSymbolName(v.name))
     vs.push("(");
+    if (v.arguments.length == 0) {
+        vs.push('void')
+    } else {
+        vs.push(toArgumentsDefinition(v.arguments, []));
+    }
+    vs.push(");\n");
+    return vs.join('')
+}
+
+export function toFunctionTypeDefinition(v: Function | ClosuresDeclare): string {
+    let vs: string[] = []
+    vs.push(`typedef `)
+    vs.push(toType(v.returnType))
+    vs.push(" (*jsc_")
+    vs.push(toSymbolName(v.name))
+    vs.push("_t)(");
     if (v.arguments.length == 0) {
         vs.push('void')
     } else {
@@ -258,6 +263,16 @@ export function toMethodClassDefinition(isa: Class, v: Method, level: number = 0
     return vs.join('')
 }
 
+export function toNewClassDefinition(isa: Class, func: Function, level: number = 0): string {
+    let vs: string[] = []
+    vs.push("\t".repeat(level));
+    if (!isa.name.export) {
+        vs.push('static ')
+    }
+    vs.push(`${toType(func.returnType)} jsc_${toSymbolName(isa.name)}_new(${func.arguments.length == 0 ? 'void' : toArgumentsDefinition(func.arguments, [])});\n`)
+    return vs.join('')
+}
+
 export function toMethodDefinition(isa: Class, v: Method, level: number = 0): string {
     let vs: string[] = []
     vs.push("\t".repeat(level));
@@ -297,6 +312,9 @@ export function toClassConst(isa: Class, base?: Class): string {
     let methodSet = new Set<string>();
 
     for (let m of isa.methods) {
+        if (m.name.name == '__init' && isa != base) {
+            continue;
+        }
         methodSet.add(m.name.name)
     }
 
@@ -371,28 +389,49 @@ export function toSource(m: Module): Source {
 
     include_h.push('#ifdef __cplusplus\nextern "C" {\n#endif\n\n');
 
+    /** enum definition */
+
+    for (let v of m.enums) {
+        include_h.push(toDoc(v, 1));
+        include_h.push(`\tenum {\n`)
+        let n = `jsc_${toSymbolName(v.name)}`
+        for (let item of v.items) {
+            include_h.push(toDoc(item, 2));
+            include_h.push(`\t\t${n}_${item.name},\n`)
+        }
+        include_h.push(`\t};\n`)
+    }
+
     /** var definition */
 
     for (let v of m.vars) {
         let n = `jsc_${toSymbolName(v.name)}`
         if (v.name.export) {
             include_h.push(toDoc(v, 1));
-            if (v.type.kind == TypeKind.PTR && v.type.func) {
-                include_h.push(`\textern ${toSymbolModule(m.name)}${toFunctionType(v.type.func, n)};\n`)
-            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+            if (v.type.kind == TypeKind.STRING && !v.type.CString) {
                 include_h.push(`\textern ${toType({ kind: TypeKind.OBJECT })} ${n};\n`)
             } else {
                 include_h.push(`\textern ${toType(v.type)} ${n};\n`)
             }
         } else {
             include_c.push(toDoc(v, 1));
-            if (v.type.kind == TypeKind.PTR && v.type.func) {
-                include_c.push(`static ${toFunctionType(v.type.func, n)} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
-            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+            if (v.type.kind == TypeKind.STRING && !v.type.CString) {
                 include_c.push(`static ${toType({ kind: TypeKind.OBJECT })} ${n} = ${toTypeDefaultValue(v.type)} ;\n`)
             } else {
                 include_c.push(`static ${toType(v.type)} ${n} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
             }
+        }
+    }
+
+    /** closures declare definition */
+    for (let f of m.closureses) {
+        if (f.name.export) {
+            include_h.push(toDoc(f, 1));
+            include_h.push("\t");
+            include_h.push(toFunctionTypeDefinition(f))
+        } else {
+            include_c.push(toDoc(f));
+            include_c.push(toFunctionTypeDefinition(f))
         }
     }
 
@@ -435,6 +474,14 @@ export function toSource(m: Module): Source {
                 include_h.push(toMethodDefinition(isa, m, 1))
             }
 
+
+            if (isa.new) {
+
+                include_h.push("\n");
+
+                include_h.push(toNewClassDefinition(isa, isa.new, 1))
+            }
+
         } else {
 
             for (let m of isa.methods) {
@@ -459,6 +506,13 @@ export function toSource(m: Module): Source {
             for (let m of isa.methods) {
                 include_c.push(toMethodDefinition(isa, m))
             }
+
+            if (isa.new) {
+
+                include_c.push("\n");
+                include_c.push(toNewClassDefinition(isa, isa.new, 1))
+
+            }
         }
     }
 
@@ -468,9 +522,7 @@ export function toSource(m: Module): Source {
     for (let v of m.vars) {
         let n = `jsc_${toSymbolModule(m.name)}_${v.name.name}`
         if (v.name.export) {
-            if (v.type.kind == TypeKind.PTR && v.type.func) {
-                include_c.push(`${toFunctionType(v.type.func, n)} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
-            } else if (v.type.kind == TypeKind.STRING && !v.type.CString) {
+            if (v.type.kind == TypeKind.STRING && !v.type.CString) {
                 include_c.push(`static ${toType({ kind: TypeKind.OBJECT })} ${n} = ${toTypeDefaultValue(v.type)} ;\n`)
             } else {
                 include_c.push(`${toType(v.type)} ${n} = ${v.initializer ? v.initializer : toTypeDefaultValue(v.type)};\n`)
@@ -566,6 +618,14 @@ export function toSource(m: Module): Source {
 
             include_c.push(`\n`)
 
+        }
+
+        if (isa.new) {
+            include_c.push(`${isa.name.export ? '' : 'static '}${toType(isa.new.returnType)} jsc_${name}_${isa.new.name.name}(${toArgumentsDefinition(isa.new.arguments, [])}) {\n`)
+            include_c.push(`\tjsc_object_t * __object = jsc_object_new((jsc_class_t *)&jsc_${name},0);\n`)
+            include_c.push(`\tjsc_${name}___init_((jsc_class_t *)&jsc_${name},__object${toArgumentsName(isa.new.arguments)});\n`)
+            include_c.push(`\treturn __object;\n`)
+            include_c.push(`}\n`)
         }
     }
 

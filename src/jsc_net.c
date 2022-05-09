@@ -1,10 +1,10 @@
 #include "jsc_type.h"
 #include "jsc_class.h"
+#include "jsc_String.h"
 #include "jsc_variant.h"
 #include "jsc_buffer.h"
 #include "jsc_ArrayBuffer.h"
 #include "jsc_DataView.h"
-#include "jsc_String.h"
 #include "jsc_net.h"
 #include "jsc_net.inc"
 #include <sys/socket.h>

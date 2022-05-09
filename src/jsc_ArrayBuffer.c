@@ -12,7 +12,7 @@
 #include "jsc_buffer.h"
 #include "jsc_String.h"
 #include "jsc_ArrayBuffer.h"
-
+#include "jsc_DataView.h"
 
 static void _jsc_ArrayBuffer_alloc(struct jsc_class_t * isa, struct jsc_object_t * object);
 static void _jsc_ArrayBuffer_dealloc(struct jsc_class_t * isa, struct jsc_object_t * object);
@@ -20,12 +20,13 @@ static struct jsc_String_t * _jsc_ArrayBuffer_toString(struct jsc_class_t * isa,
 
 static jsc_int_t _jsc_ArrayBuffer_byteLength(jsc_class_t * isa, jsc_object_t * object);
 static struct jsc_ArrayBuffer_t * _jsc_ArrayBuffer_slice(jsc_class_t * isa, jsc_object_t * object,jsc_int_t begin,jsc_int_t end);
-
+static jsc_int_t _jsc_ArrayBuffer_copy(jsc_class_t * isa, jsc_object_t * object, jsc_object_t * dst,jsc_int_t begin,jsc_int_t end);
 
 jsc_ArrayBuffer_class_t jsc_ArrayBuffer = { {&jsc_Object,sizeof(jsc_ArrayBuffer_t),"ArrayBuffer",
     _jsc_ArrayBuffer_alloc,_jsc_ArrayBuffer_dealloc,NULL,NULL,_jsc_ArrayBuffer_toString,NULL,NULL,NULL},
     _jsc_ArrayBuffer_byteLength,
     _jsc_ArrayBuffer_slice,
+    _jsc_ArrayBuffer_copy,
 };
 
 
@@ -65,6 +66,24 @@ struct jsc_ArrayBuffer_t * jsc_ArrayBuffer_slice_(jsc_class_t * isa, jsc_object_
     return NULL;
 }
 
+jsc_int_t jsc_ArrayBuffer_copy_(jsc_class_t * isa, jsc_object_t * object, jsc_object_t * dst,jsc_int_t begin,jsc_int_t end) {
+    
+    if(isa == NULL || object == NULL) {
+        return -1;
+    }
+    
+    if(jsc_class_isKind(isa, &jsc_ArrayBuffer.base)) {
+        jsc_ArrayBuffer_class_t * s = (jsc_ArrayBuffer_class_t *) isa;
+        if(s->copy) {
+            return (*s->copy)(isa,object,dst,begin,end);
+        } else {
+            return jsc_ArrayBuffer_copy_(isa->isa,dst,object,begin,end);
+        }
+    }
+
+    return -1;
+}
+
 jsc_int_t jsc_ArrayBuffer_byteLength(jsc_object_t * object) {
     if(object == NULL) {
         return 0;
@@ -77,6 +96,13 @@ struct jsc_ArrayBuffer_t * jsc_ArrayBuffer_slice(jsc_object_t * object,jsc_int_t
         return NULL;
     }
     return jsc_ArrayBuffer_slice_(object->isa,object,begin,end);
+}
+
+jsc_int_t jsc_ArrayBuffer_copy(jsc_object_t * object, jsc_object_t * dst,jsc_int_t begin,jsc_int_t end) {
+    if(object == NULL) {
+        return -1;
+    }
+    return jsc_ArrayBuffer_copy_(object->isa,object,dst,begin,end);
 }
 
 /* alloc */
@@ -169,10 +195,40 @@ static struct jsc_ArrayBuffer_t * _jsc_ArrayBuffer_slice(jsc_class_t * isa, jsc_
     
     jsc_ArrayBuffer_t * dst = jsc_ArrayBuffer_new(n);
     
-    memcpy(v->_data + begin, dst->_data, n);
+    memcpy(dst->_data,v->_data + begin, n);
     
     return dst;
 }
 
+static jsc_int_t _jsc_ArrayBuffer_copy(jsc_class_t * isa, jsc_object_t * object, jsc_object_t * dst,jsc_int_t begin,jsc_int_t end) {
+    
+    jsc_ArrayBuffer_t * v = (jsc_ArrayBuffer_t *) object;
+    
+    jsc_int_t length = v->_byteLength;
+    
+    if( begin < 0 ) {
+        begin = length + begin;
+    }
+    
+    if(begin <0 || begin >= length) {
+        return -1;
+    }
 
+    jsc_int_t n = (end < 0 || end > length) ? length - begin : end - begin;
+  
+    if( dst == NULL || !jsc_class_isKind(dst->isa, (jsc_class_t *) &jsc_DataView)) {
+        return -1;
+    }
+    
+    jsc_DataView_t * d = (jsc_DataView_t *) dst;
+    
+    if(n < d->_byteLength || d->_buffer == NULL) {
+        return -1;
+    }
+    
+    memcpy(d->_buffer->_data + d->_byteOffset, v->_data + begin, n);
+    
+    return n;
+    
+}
 

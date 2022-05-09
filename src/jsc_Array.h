@@ -79,6 +79,8 @@ extern "C" {
     jsc_int_t jsc_Array_indexOf(jsc_object_t * object,struct jsc_variant_t v);
     struct jsc_Iterator_t * jsc_Array_iterator(jsc_object_t * object);
 
+    jsc_object_t * jsc_Array_add(jsc_object_t * object,struct jsc_variant_t v);
+
 #ifdef __cplusplus
 }
 #endif

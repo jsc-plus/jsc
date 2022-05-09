@@ -2,11 +2,12 @@ import * as ts from "typescript"
 import * as fs from "fs"
 import * as path from "path"
 import { Source, toSource, toSymbolModule, toSymbolModulePath, toSymbolName, toType, toTypeDefaultValue } from "./source"
-import { Module, Function, Type, Argument, Doc, Tag, Class, Property, Method, Body, Symbol, ModuleName, Scope, ScopeVar, TypeKinds, TypeKind, Var, isEmptyModule } from "./types"
-import { baseClassSet, baseFunctionSet } from "./base"
+import { Module, Function, Type, Argument, Doc, Tag, Class, Property, Method, Body, Symbol, ModuleName, Scope, ScopeVar, TypeKinds, TypeKind, Var, isEmptyModule, Enum, EnumItem, Closures, ClosuresDeclare } from "./types"
+import { baseClassSet, baseFunctionSet, getBaseClass, getBaseFunction, getBaseVar, getRefClass } from "./base"
 
 var StringClass = baseClassSet.get('String')!
 var ObjectClass = baseClassSet.get('Object')!
+var ClosuresClass = baseClassSet.get('Closures')!
 
 export interface SourceFileModule extends Module {
     sourceFile: ts.SourceFile
@@ -22,6 +23,8 @@ export interface ContextOptions {
     scope?: Scope
     isa?: Class
     method?: Method
+    returnType?: Type
+    setArgumentCode?: string
 }
 
 export class Context {
@@ -84,6 +87,24 @@ export class Context {
         }
     }
 
+    get returnType(): Type | undefined {
+        if (this._options.returnType) {
+            return this._options.returnType
+        }
+        if (this._parent) {
+            return this._parent!.returnType
+        }
+    }
+
+    get setArgumentCode(): string | undefined {
+        if (this._options.setArgumentCode !== undefined) {
+            return this._options.setArgumentCode
+        }
+        if (this._parent) {
+            return this._parent!.setArgumentCode
+        }
+    }
+
     getModule(): SourceFileModule | undefined {
         if (this._options.module) {
             return this._options.module
@@ -114,11 +135,38 @@ export class Context {
                 let r = m.ref.get(name.substring(0, i))
                 if (r) {
                     let n = name.substring(i + 1)
-                    return this.getClass(n,r)
+                    return this.getClass(n, r)
                 }
             }
         }
-        return baseClassSet.get(name)
+        return getBaseClass(name)
+    }
+
+    getEnum(name: string, m?: Module): Enum | undefined {
+        if (m === undefined) {
+            m = this.getModule()
+        }
+        if (m) {
+            for (let v of m.enums) {
+                if (v.name.name == name) {
+                    return v
+                }
+            }
+            {
+                let v = m.refEnum.get(name)
+                if (v) {
+                    return v
+                }
+            }
+            let i = name.indexOf('.')
+            if (i >= 0) {
+                let r = m.ref.get(name.substring(0, i))
+                if (r) {
+                    let n = name.substring(i + 1)
+                    return this.getEnum(n, r)
+                }
+            }
+        }
     }
 
     getVar(name: string, m?: Module): Var | undefined {
@@ -146,6 +194,7 @@ export class Context {
                 }
             }
         }
+        return getBaseVar(name)
     }
 }
 
@@ -156,16 +205,16 @@ export function mkdir(dir: string): void {
     }
 }
 
-export function assignVarType(type: Type, fromType: Type): string {
+export function assignVarType(type: Type, fromType: Type, code: string): string {
     let t = type.isa == StringClass ? TypeKind.OBJECT : type.kind
     let f = fromType.isa == StringClass ? TypeKind.OBJECT : fromType.kind
     if (t == f) {
-        return ''
+        return code
     }
-    return `JSC_AS_${TypeKinds[t]}_${TypeKinds[f]}`
+    return `JSC_AS_${TypeKinds[t]}_${TypeKinds[f]}(${code})`
 }
 
-export function parseFunctionType(ctx: Context, s: ts.FunctionTypeNode): Function {
+export function parseFunctionType(ctx: Context, s: ts.FunctionTypeNode): ClosuresDeclare {
     let v: Function = {
         name: {
             name: '__type',
@@ -174,7 +223,66 @@ export function parseFunctionType(ctx: Context, s: ts.FunctionTypeNode): Functio
         returnType: parseVarType(ctx, { kind: TypeKind.VOID }, s.type),
         arguments: parseArguments(ctx, s.parameters)
     }
-    return v;
+    return getClosuresDeclare(ctx, v);
+}
+
+export function parseStringType(ctx: Context, text: string): Type | undefined {
+    switch (text) {
+        case 'jsc.uint64':
+            return { kind: TypeKind.UINT64 }
+        case 'jsc.int64':
+            return { kind: TypeKind.INT64 }
+        case 'jsc.uint32':
+            return { kind: TypeKind.UINT32 }
+        case 'jsc.int32':
+            return { kind: TypeKind.INT32 }
+        case 'jsc.uint16':
+            return { kind: TypeKind.UINT16 }
+        case 'jsc.int16':
+            return { kind: TypeKind.INT16 }
+        case 'jsc.uint8':
+            return { kind: TypeKind.UINT8 }
+        case 'jsc.int8':
+            return { kind: TypeKind.INT8 }
+        case 'jsc.uint':
+            return { kind: TypeKind.UINT }
+        case 'jsc.int':
+            return { kind: TypeKind.INT }
+        case 'jsc.ulong':
+            return { kind: TypeKind.ULONG }
+        case 'jsc.long':
+            return { kind: TypeKind.LONG }
+        case 'jsc.float32':
+            return { kind: TypeKind.FLOAT32 }
+        case 'number':
+        case 'jsc.float64':
+            return { kind: TypeKind.FLOAT64 }
+        case 'boolean':
+            return { kind: TypeKind.BOOLEAN }
+        case 'string':
+            return { kind: TypeKind.STRING }
+        case 'any':
+            return { kind: TypeKind.VARIANT }
+        case 'void':
+            return { kind: TypeKind.VOID }
+        case 'jsc.CString':
+            return { kind: TypeKind.STRING, CString: true }
+    }
+
+    {
+        let isa = getBaseClass(text)
+        if (isa) {
+            return { kind: TypeKind.OBJECT, isa: isa }
+        }
+    }
+
+    {
+        let v = getBaseVar(text)
+        if (v) {
+            return v.type
+        }
+    }
+
 }
 
 export function parseVarType(ctx: Context, defaultType: Type, type?: ts.TypeNode): Type {
@@ -191,48 +299,17 @@ export function parseVarType(ctx: Context, defaultType: Type, type?: ts.TypeNode
             return t
         }
 
-        switch (type.getText()) {
-            case 'jsc.uint64':
-                return { kind: TypeKind.UINT64 }
-            case 'jsc.int64':
-                return { kind: TypeKind.INT64 }
-            case 'jsc.uint32':
-                return { kind: TypeKind.UINT32 }
-            case 'jsc.int32':
-                return { kind: TypeKind.INT32 }
-            case 'jsc.uint16':
-                return { kind: TypeKind.UINT16 }
-            case 'jsc.int16':
-                return { kind: TypeKind.INT16 }
-            case 'jsc.uint8':
-                return { kind: TypeKind.UINT8 }
-            case 'jsc.int8':
-                return { kind: TypeKind.INT8 }
-            case 'jsc.uint':
-                return { kind: TypeKind.UINT }
-            case 'jsc.int':
-                return { kind: TypeKind.INT }
-            case 'jsc.ulong':
-                return { kind: TypeKind.ULONG }
-            case 'jsc.long':
-                return { kind: TypeKind.LONG }
-            case 'jsc.float32':
-                return { kind: TypeKind.FLOAT32 }
-            case 'number':
-            case 'jsc.float64':
-                return { kind: TypeKind.FLOAT64 }
-            case 'boolean':
-                return { kind: TypeKind.BOOLEAN }
-            case 'string':
-                return { kind: TypeKind.STRING }
-            case 'any':
-                return { kind: TypeKind.VARIANT }
-            case 'jsc.ptr':
-                return { kind: TypeKind.PTR }
-            case 'void':
-                return { kind: TypeKind.VOID }
-            case 'jsc.CString':
-                return { kind: TypeKind.STRING, CString: true }
+        if (ts.isArrayTypeNode(type)) {
+            return {
+                kind: TypeKind.OBJECT,
+                isa: baseClassSet.get('Array')
+            }
+        }
+        {
+            let t = parseStringType(ctx, type.getText())
+            if (t !== undefined) {
+                return t
+            }
         }
 
         console.info(type.getText())
@@ -243,17 +320,24 @@ export function parseVarType(ctx: Context, defaultType: Type, type?: ts.TypeNode
             for (let i of t.symbol.declarations) {
                 if (ts.isFunctionTypeNode(i)) {
                     return {
-                        kind: TypeKind.PTR,
-                        func: parseFunctionType(ctx, i)
+                        kind: TypeKind.OBJECT,
+                        isa: ClosuresClass,
+                        closures: parseFunctionType(ctx, i)
                     }
                 }
             }
         }
 
-        let isa = ctx.getClass(t.symbol.name);
+        let isa = ctx.getClass(type.getText().replace(/<.*>/g, ''));
 
         if (isa) {
             return { kind: TypeKind.OBJECT, isa: isa }
+        }
+
+        let e = ctx.getEnum(type.getText());
+
+        if (e) {
+            return e.type
         }
 
     }
@@ -264,12 +348,13 @@ export function isStringType(t: Type): boolean {
     return t.kind == TypeKind.STRING || (t.kind == TypeKind.OBJECT && t.isa == StringClass)
 }
 
-let logicOpSet = new Set<string>(['==', '===', '!=', '!==', '>', '>=', '<', '<=', '&&', '||'])
+let logicOpSet = new Set<string>(['==', '===', '!=', '!==', '>', '>=', '<', '<=', '&&', '||', 'instanceof'])
 
 export function parseVarTypeWithExpression(ctx: Context, s: ts.Expression, defaultType: Type): Type {
-    if (ts.isNewExpression(s)) {
-        let sv = getScopeVar(ctx, s.expression);
-        return sv.type
+    if (ts.isParenthesizedExpression(s)) {
+        return parseVarTypeWithExpression(ctx, s.expression, defaultType);
+    } else if (ts.isNewExpression(s)) {
+        return parseVarTypeWithExpression(ctx, s.expression, defaultType);
     } else if (ts.isStringLiteral(s)) {
         return {
             kind: TypeKind.STRING
@@ -332,10 +417,122 @@ export function parseVarTypeWithExpression(ctx: Context, s: ts.Expression, defau
         return {
             kind: TypeKind.INT
         }
-    } else {
-        let sv = getScopeVar(ctx, s);
-        return sv.type
+    } else if (ts.isArrayLiteralExpression(s)) {
+        return {
+            kind: TypeKind.OBJECT,
+            isa: baseClassSet.get('Array')
+        }
+    } else if (ts.isPropertyAccessExpression(s)) {
+        let text = s.getText()
+        let t = parseStringType(ctx, text)
+        if (t !== undefined) {
+            return t
+        }
+        let aType = parseVarTypeWithExpression(ctx, s.expression, defaultType);
+        if (aType.kind == TypeKind.OBJECT && aType.isa) {
+            let p = getClassWithProperty(s.name.text, getRefClass(aType.isa))
+            if (p) {
+                return p.prop.type
+            }
+        } else if (aType.enum) {
+            for (let item of aType.enum.items) {
+                if (item.name == s.name.text) {
+                    return aType
+                }
+            }
+        }
+        return defaultType
+    } else if (ts.isCallExpression(s)) {
+        let text = s.expression.getText();
+        let baseFunc = getBaseFunction(text)
+        if (baseFunc) {
+            return baseFunc.returnType
+        }
+        if (ts.isPropertyAccessExpression(s.expression)) {
+            let aType = parseVarTypeWithExpression(ctx, s.expression.expression, { kind: TypeKind.NIL });
+            if (aType.kind == TypeKind.OBJECT) {
+                let name = s.expression.name.text
+                let m = getClassWithMethod(name, getRefClass(aType.isa))
+                if (m) {
+                    return m.method.returnType
+                }
+            }
+        }
+        return defaultType
+    } else if (s.kind == ts.SyntaxKind.ThisKeyword) {
+        if (ctx.isa) {
+            return {
+                kind: TypeKind.OBJECT,
+                isa: ctx.isa
+            }
+        }
+    } else if (s.kind == ts.SyntaxKind.SuperKeyword) {
+        if (ctx.isa) {
+            return {
+                kind: TypeKind.OBJECT,
+                isa: ctx.isa.base || ObjectClass
+            }
+        }
+    } else if (s.kind == ts.SyntaxKind.TrueKeyword || s.kind == ts.SyntaxKind.FalseKeyword) {
+        return { kind: TypeKind.BOOLEAN }
+    } else if (s.kind == ts.SyntaxKind.UndefinedKeyword || s.kind == ts.SyntaxKind.NullKeyword) {
+        return { kind: TypeKind.NIL }
+    } else if (ts.isArrayLiteralExpression(s)) {
+        return { kind: TypeKind.OBJECT, isa: baseClassSet.get('Array') }
+    } else if (ts.isIdentifier(s)) {
+
+        let text = s.text
+
+        if (text == 'undefined' || text == 'null') {
+            return { kind: TypeKind.NIL }
+        } else if (text == 'true' || text == 'false') {
+            return { kind: TypeKind.BOOLEAN }
+        }
+
+        {
+            let v = ctx.scope.get(text)
+            if (v) {
+                return v.type
+            }
+        }
+
+        {
+            let v = ctx.getVar(text)
+            if (v) {
+                return v.type
+            }
+        }
+
+        {
+            let v = ctx.getClass(s.text.replace(/<.*>/g, ''))
+            if (v) {
+                return {
+                    kind: TypeKind.OBJECT,
+                    isa: v
+                }
+            }
+        }
+
+        {
+            let v = ctx.getEnum(text)
+            if (v) {
+                return v.type
+            }
+        }
+
+    } else if (ts.isConditionalExpression(s)) {
+        return parseVarTypeWithExpression(ctx, s.whenTrue, defaultType)
+    } else if (ts.isArrowFunction(s)) {
+        return {
+            kind: TypeKind.OBJECT,
+            isa: ClosuresClass,
+            closures: (s as any).__closures.declare
+        }
     }
+
+    console.error(s)
+    debugger
+    throw new Error(s.getText())
 }
 
 export function parseArguments(ctx: Context, args: ts.NodeArray<ts.ParameterDeclaration>): Argument[] {
@@ -368,76 +565,6 @@ export function parseDoc(ctx: Context, doc: Doc, symbol: ts.Symbol): void {
     }
 }
 
-export function getScopeVar(ctx: Context, s: ts.Expression): ScopeVar {
-
-    if (s.kind == ts.SyntaxKind.SuperKeyword) {
-        if (ctx.isa) {
-            return {
-                name: {
-                    name: 'super'
-                },
-                type: {
-                    kind: TypeKind.OBJECT,
-                    isa: ctx.isa.base
-                }
-            }
-        }
-    }
-
-    if (s.kind == ts.SyntaxKind.ThisKeyword) {
-        if (ctx.isa) {
-            return {
-                name: {
-                    name: 'this'
-                },
-                type: {
-                    kind: TypeKind.OBJECT,
-                    isa: ctx.isa
-                }
-            }
-        }
-    }
-
-    if (ts.isIdentifier(s)) {
-
-        let v = ctx.scope.get(s.text);
-
-        if (v) {
-            return v
-        }
-
-        for (let i of ctx.module.classes) {
-            if (i.name.name == s.text) {
-                return {
-                    name: i.name,
-                    type: {
-                        kind: TypeKind.OBJECT,
-                        isa: i
-                    }
-                }
-            }
-        }
-
-        let isa = baseClassSet.get(s.text)
-
-        if (isa) {
-            return {
-                name: isa.name,
-                type: {
-                    kind: TypeKind.OBJECT,
-                    isa: isa
-                }
-            }
-        }
-    }
-
-
-
-    console.error(s)
-    debugger
-    throw new Error(`getObjectSymbol kind:${s.kind}`)
-}
-
 export function getClassWithMethod(method: string, isa?: Class): { isa: Class, method: Method } | undefined {
     if (isa) {
         for (let i of isa.methods) {
@@ -461,10 +588,33 @@ export function getClassWithMethod(method: string, isa?: Class): { isa: Class, m
     }
 }
 
-export function parseCallArguments(ctx: Context, args: ts.NodeArray<ts.Expression> | undefined, func: Function, vs: string[] = []): string {
+export function getClassWithProperty(prop: string, isa?: Class): { isa: Class, prop: Property } | undefined {
+    if (isa) {
+        for (let i of isa.properties) {
+            if (i.name.name == prop) {
+                return {
+                    isa: isa,
+                    prop: i
+                }
+            }
+        }
+        return getClassWithProperty(prop, isa.base)
+    } else {
+        for (let i of ObjectClass.properties) {
+            if (i.name.name == prop) {
+                return {
+                    isa: ObjectClass,
+                    prop: i,
+                }
+            }
+        }
+    }
+}
+
+export function parseCallArguments(ctx: Context, args: ts.NodeArray<ts.Expression> | undefined, func: Function, vs: string[] = [], funcIndex: number = 0): string {
     let i = 0;
-    while (i < func.arguments.length) {
-        let a = func.arguments[i];
+    while (i + funcIndex < func.arguments.length) {
+        let a = func.arguments[i + funcIndex];
         if (a.name == '...') {
             if (i > 0 && args && i - 1 < args.length) {
                 let e = args[i - 1]
@@ -502,7 +652,7 @@ export function parseCallArguments(ctx: Context, args: ts.NodeArray<ts.Expressio
                         }
                         if (i < args.length) {
                             let v = parseVarTypeWithExpression(ctx, args[i], { kind: t })
-                            vs.push(`${assignVarType({ kind: t }, v)}(${parseExpression(ctx, args[i])})`)
+                            vs.push(`${assignVarType({ kind: t }, v, parseExpression(ctx, args[i]))}`)
                         } else {
                             vs.push(`${toTypeDefaultValue({ kind: t })}`)
                         }
@@ -517,7 +667,7 @@ export function parseCallArguments(ctx: Context, args: ts.NodeArray<ts.Expressio
             }
         } else if (args && i < args.length) {
             let v = parseVarTypeWithExpression(ctx, args[i], a.type)
-            vs.push(`${assignVarType(a.type, v)}(${parseExpression(ctx, args[i])})`)
+            vs.push(`${assignVarType(a.type, v, parseExpression(ctx, args[i]))}`)
         } else {
             vs.push(toTypeDefaultValue(a.type))
         }
@@ -526,22 +676,111 @@ export function parseCallArguments(ctx: Context, args: ts.NodeArray<ts.Expressio
     return vs.join(',')
 }
 
+export function getSetType(t: Type): { isStrong: boolean, isWeak: boolean, isVariant: boolean, type: Type } {
+    if ((t.var || t.property) && t.kind == TypeKind.STRING && !t.CString) {
+        return {
+            isStrong: true,
+            isWeak: t.weak ? true : false,
+            isVariant: false,
+            type: {
+                kind: TypeKind.OBJECT,
+                isa: StringClass,
+            }
+        }
+    }
+    return {
+        isStrong: t.kind == TypeKind.OBJECT || t.kind == TypeKind.VARIANT,
+        isWeak: t.weak ? true : false,
+        isVariant: t.kind == TypeKind.VARIANT,
+        type: t
+    }
+}
+
+
 export function parseExpression(ctx: Context, s: ts.Expression): string {
 
-    if (ts.isCallExpression(s)) {
-        let baseFunc = baseFunctionSet.get(s.expression.getText())
+    if (ts.isParenthesizedExpression(s)) {
+        return `(${parseExpression(ctx, s.expression)})`
+    } else if (ts.isCallExpression(s)) {
+        let text = s.expression.getText();
+        let baseFunc = getBaseFunction(text)
         if (baseFunc) {
-            return `${baseFunc.name.name}(${parseCallArguments(ctx, s.arguments, baseFunc)})`
-        } else if (ts.isPropertyAccessExpression(s.expression)) {
-            let sv = getScopeVar(ctx, s.expression.expression);
-            if (sv.type.kind == TypeKind.OBJECT) {
+            return `jsc_${toSymbolName(baseFunc.name)}(${parseCallArguments(ctx, s.arguments, baseFunc)})`
+        }
+        if (ts.isPropertyAccessExpression(s.expression)) {
+            let aType = parseVarTypeWithExpression(ctx, s.expression.expression, { kind: TypeKind.NIL });
+            if (aType.kind == TypeKind.OBJECT) {
                 let name = s.expression.name.text
-                let m = getClassWithMethod(name, sv.type.isa)
-                let objectName = sv.name.name == 'this' || sv.name.name == 'super' ? '__object' : sv.name.name
+                let m = getClassWithMethod(name, getRefClass(aType.isa))
                 if (m && m.isa == ObjectClass) {
-                    return `jsc_object_${name}_((jsc_class_t *)&jsc_Object,${objectName}${parseCallArguments(ctx, s.arguments, m.method)})`
+                    return `jsc_object_${name}_((jsc_class_t *)&jsc_Object,${parseExpression(ctx, s.expression.expression)}${parseCallArguments(ctx, s.arguments, m.method, [''])})`
                 } else if (m && m.isa) {
-                    return `jsc_${toSymbolName(m.isa.name)}_${name}_((jsc_class_t *)&jsc_${toSymbolName(m.isa.name)},${objectName}${parseCallArguments(ctx, s.arguments, m.method)})`
+                    return `jsc_${toSymbolName(m.isa.name)}_${name}_((jsc_class_t *)&jsc_${toSymbolName(m.isa.name)},${parseExpression(ctx, s.expression.expression)}${parseCallArguments(ctx, s.arguments, m.method, [''])})`
+                }
+            }
+        } else if (s.expression.kind == ts.SyntaxKind.SuperKeyword && ctx.isa && ctx.isa.base && ctx.isa.base.new) {
+            let init: Method | undefined
+            for (let m of ctx.isa.base.methods) {
+                if (m.name.name == '__init') {
+                    init = m
+                    break
+                }
+            }
+            if (init) {
+                return `jsc_${toSymbolName(ctx.isa.base.name)}_${init.name.name}_((jsc_class_t *)&jsc_${toSymbolName(ctx.isa.name)},__object${parseCallArguments(ctx, s.arguments, init, [''])})`
+            }
+        } else {
+            let text = s.expression.getText()
+            let v = ctx.scope.get(text)
+            if (v && v.type.kind == TypeKind.OBJECT && v.type.isa == ClosuresClass && v.type.closures) {
+                let closures = v.type.closures!
+                return `(*(jsc_${toSymbolName(closures.name)}_t)((jsc_Closures_t *)${v.name.name})->imp)(${v.name.name}${parseCallArguments(ctx, s.arguments, closures, [''], 1)})`
+            }
+        }
+
+    } else if (ts.isPropertyAccessExpression(s)) {
+        let text = s.getText()
+        {
+            let v = getBaseVar(text)
+            if (v) {
+                return `jsc_${toSymbolName(v.name)}`
+            }
+        }
+        let aType = parseVarTypeWithExpression(ctx, s.expression, { kind: TypeKind.NIL });
+        if (aType.kind == TypeKind.OBJECT) {
+            let name = s.name.text
+            let p = getClassWithProperty(name, getRefClass(aType.isa))
+            if (p && p.isa) {
+
+                let objectCode = parseExpression(ctx, s.expression)
+
+                if (ctx.setArgumentCode !== undefined) {
+                    if (p.prop.setter) {
+                        return `jsc_${toSymbolName(p.isa.name)}_${p.prop.setter}(${objectCode},${ctx.setArgumentCode})`
+                    } else {
+                        let r = getSetType(p.prop.type)
+                        let dst = `((jsc_${toSymbolName(p.isa.name)}_t *)(${objectCode}))->${name}`
+                        if (r.isStrong && r.isWeak) {
+                            return `jsc_${r.isVariant ? 'variant_' : ''}setWeak(&(${dst}),${ctx.setArgumentCode})`
+                        } else if (r.isStrong) {
+                            return `jsc_${r.isVariant ? 'variant_' : ''}setStrong(&(${dst}),${ctx.setArgumentCode})`
+                        } else {
+                            return `${dst} = ${ctx.setArgumentCode}`
+                        }
+                    }
+                } else {
+                    if (p.prop.getter) {
+                        return `jsc_${toSymbolName(p.isa.name)}_${p.prop.getter}(${objectCode})`
+                    }
+                    return `((jsc_${toSymbolName(p.isa.name)}_t *)(${objectCode}))->${name}`
+                }
+
+            }
+        } else if (aType.enum) {
+            let name = s.name.text
+            for (let item of aType.enum.items) {
+                if (name == item.name) {
+                    return `jsc_${toSymbolName(aType.enum.name)}_${name}`
                 }
             }
         }
@@ -551,34 +790,96 @@ export function parseExpression(ctx: Context, s: ts.Expression): string {
         return s.text
     } else if (ts.isBinaryExpression(s)) {
         let op: string = s.operatorToken.getText()
-        if (op == '===') {
-            op = '=='
-        } else if (op == '!==') {
-            op = '!='
-        }
         let aType = parseVarTypeWithExpression(ctx, s.left, { kind: TypeKind.STRING })
         let bType = parseVarTypeWithExpression(ctx, s.right, { kind: TypeKind.STRING })
+
+        if (op == 'instanceof') {
+            let isa = ctx.getClass(s.right.getText())
+            if (isa) {
+                let a = assignVarType({ kind: TypeKind.OBJECT }, aType, parseExpression(ctx, s.left))
+                return `jsc_object_isKind(${a},(jsc_class_t *) &jsc_${toSymbolName(isa.name)})`
+            } else {
+                console.info(s)
+                debugger
+                throw new Error(s.getText())
+            }
+        }
+
         if (op == '=') {
 
-            if (aType.var && (aType.isa || aType.kind == TypeKind.OBJECT || (aType.kind == TypeKind.STRING && !aType.CString))) {
-                if (aType.weak) {
-                    return `jsc_setWeak(&${parseExpression(ctx, s.left)},${assignVarType({ kind: TypeKind.OBJECT }, bType)}(${parseExpression(ctx, s.right)}))`
+            let r = getSetType(aType)
+
+            let bCode = `${assignVarType(r.type, bType, parseExpression(ctx, s.right))}`
+
+            if (ts.isPropertyAccessExpression(s.left)) {
+                return parseExpression(ctx.newContext({ setArgumentCode: bCode }), s.left)
+            } else {
+
+                let dst = parseExpression(ctx, s.left)
+
+                if (r.isStrong && r.isWeak) {
+                    return `jsc_${r.isVariant ? 'variant_' : ''}setWeak(&(${dst}),${bCode})`
+                } else if (r.isStrong) {
+                    return `jsc_${r.isVariant ? 'variant_' : ''}setStrong(&(${dst}),${bCode})`
                 } else {
-                    return `jsc_setStrong(&${parseExpression(ctx, s.left)},${assignVarType({ kind: TypeKind.OBJECT }, bType)}(${parseExpression(ctx, s.right)}))`
+                    return `${dst} = ${bCode}`
                 }
             }
 
-        } if (isStringType(aType) || isStringType(bType)) {
+        }
+
+        if (isStringType(aType) || isStringType(bType)) {
+            if (op == '===') {
+                op = '=='
+            } else if (op == '!==') {
+                op = '!='
+            }
             if (op == '==' || op == '!=' || op == '<' || op == '<=' || op == '>' || op == '>=') {
-                return `(JSC_STRING_COMP(${assignVarType({ kind: TypeKind.STRING }, aType)}(${parseExpression(ctx, s.left)}),${assignVarType({ kind: TypeKind.STRING }, bType)}(${parseExpression(ctx, s.right)})) ${op} 0)`
+                return `JSC_STRING_COMP(${assignVarType({ kind: TypeKind.STRING }, aType, parseExpression(ctx, s.left))},${assignVarType({ kind: TypeKind.STRING }, bType, parseExpression(ctx, s.right))}) ${op} 0`
             } else if (op == '+') {
-                return `JSC_STRING_ADD(${assignVarType({ kind: TypeKind.STRING }, aType)}(${parseExpression(ctx, s.left)}),${assignVarType({ kind: TypeKind.STRING }, bType)}(${parseExpression(ctx, s.right)}))`
+                return `JSC_STRING_ADD(${assignVarType({ kind: TypeKind.STRING }, aType, parseExpression(ctx, s.left))},${assignVarType({ kind: TypeKind.STRING }, bType, parseExpression(ctx, s.right))})`
             } else {
                 debugger
                 throw new Error(s.getText())
             }
         }
-        return `(${parseExpression(ctx, s.left)}${op}${parseExpression(ctx, s.right)})`
+
+        if (aType.kind == TypeKind.VARIANT || bType.kind == TypeKind.VARIANT) {
+            let a = assignVarType({ kind: TypeKind.VARIANT }, aType, parseExpression(ctx, s.left))
+            let b = assignVarType({ kind: TypeKind.VARIANT }, bType, parseExpression(ctx, s.right))
+            if (op == '===') {
+                return `jsc_variant_strict_compare(${a},${b}) == 0`
+            } else if (op == '!==') {
+                return `jsc_variant_strict_compare(${a},${b}) != 0`
+            } else if (op == '==' || op == '!=' || op == '<' || op == '<=' || op == '>' || op == '>=') {
+                return `jsc_variant_strict_compare(${a},${b}) ${op} 0`
+            } else if (op == '+') {
+                return `jsc_variant_add(${a},${b})`
+            } else if (op == '-') {
+                return `jsc_variant_sub(${a},${b})`
+            } else if (op == '*') {
+                return `jsc_variant_mul(${a},${b})`
+            } else if (op == '/') {
+                return `jsc_variant_div(${a},${b})`
+            } else if (op == '%') {
+                return `jsc_variant_mod(${a},${b})`
+            } else if (op == '&') {
+                return `jsc_variant_bit_and(${a},${b})`
+            } else if (op == '|') {
+                return `jsc_variant_bit_or(${a},${b})`
+            } else if (op == '^') {
+                return `jsc_variant_bit_xor(${a},${b})`
+            } else {
+                console.info(s)
+                debugger
+                throw new Error(s.getText())
+            }
+        }
+
+        if (aType.kind < bType.kind) {
+            return `${assignVarType(bType, aType, parseExpression(ctx, s.left))}${op}${parseExpression(ctx, s.right)}`
+        }
+        return `${parseExpression(ctx, s.left)}${op}${assignVarType(aType, bType, parseExpression(ctx, s.right))}`
     } else if (ts.isPrefixUnaryExpression(s)) {
         if (ts.isIdentifier(s.operand)) {
             switch (s.operator) {
@@ -592,37 +893,84 @@ export function parseExpression(ctx: Context, s: ts.Expression): string {
         if (ts.isIdentifier(s.operand)) {
             switch (s.operator) {
                 case ts.SyntaxKind.PlusPlusToken:
-                    return `(${s.operand.text}++)`
+                    return `${s.operand.text}++`
                 case ts.SyntaxKind.MinusMinusToken:
-                    return `(${s.operand.text}--)`
+                    return `${s.operand.text}--`
             }
         }
     } else if (ts.isNewExpression(s)) {
-        let sv = getScopeVar(ctx, s.expression);
-        if (sv.type.kind == TypeKind.OBJECT && sv.type.isa) {
-            if (sv.type.isa.new) {
-                return `(jsc_object_t *) jsc_${toSymbolName(sv.type.isa.name)}_${sv.type.isa.new.name.name}(${parseCallArguments(ctx, s.arguments, sv.type.isa.new)})`;
+        let aType = parseVarTypeWithExpression(ctx, s.expression, { kind: TypeKind.OBJECT });
+        let isa = getRefClass(aType.isa)
+        if (aType.kind == TypeKind.OBJECT && isa) {
+            if (isa.new) {
+                return `(jsc_object_t *) jsc_${toSymbolName(isa.name)}_${isa.new.name.name}(${parseCallArguments(ctx, s.arguments, isa.new)})`;
             }
-            return `jsc_object_new((jsc_class_t*)&jsc_${toSymbolName(sv.type.isa.name)},0)`
+            return `jsc_object_new((jsc_class_t*)&jsc_${toSymbolName(isa.name)},0)`
         }
     } else if (ts.isIdentifier(s)) {
+        if (s.text == 'undefined' || s.text == 'null') {
+            return 'NULL'
+        }
         {
             let v = ctx.getVar(s.text)
-            if(v) {
+            if (v) {
                 return `jsc_${toSymbolName(v.name)}`
             }
         }
         return s.text;
+    } else if (s.kind == ts.SyntaxKind.FalseKeyword) {
+        return '0'
+    } else if (s.kind == ts.SyntaxKind.TrueKeyword) {
+        return '1'
+    } else if (s.kind == ts.SyntaxKind.UndefinedKeyword || s.kind == ts.SyntaxKind.NullKeyword) {
+        return 'NULL'
+    } else if (s.kind == ts.SyntaxKind.ThisKeyword || s.kind == ts.SyntaxKind.SuperKeyword) {
+        return '__object'
+    } else if (ts.isArrayLiteralExpression(s)) {
+        let ss = `jsc_object_new((jsc_class_t *) &jsc_Array,0)`
+        for (let a of s.elements) {
+            let aType = parseVarTypeWithExpression(ctx, a, { kind: TypeKind.VARIANT })
+            ss = `jsc_object_add(${ss},${assignVarType({ kind: TypeKind.VARIANT }, aType, parseExpression(ctx, a))})`
+        }
+        return ss
+    } else if (ts.isConditionalExpression(s)) {
+        return `${parseExpression(ctx, s.condition)} ? ${parseExpression(ctx, s.whenTrue)} : ${parseExpression(ctx, s.whenFalse)}`
+    } else if (ts.isArrowFunction(s)) {
+
+        if ((s as any).__closures) {
+            let closures: Closures = (s as any).__closures
+            parseClosures(ctx, s.body, closures)
+            let vs: string[] = []
+            vs.push(`(jsc_object_t *) jsc_Closures_new((void *) jsc_${toSymbolName(closures.func.name)}`)
+            for (let key of closures.keys) {
+                let t = closures.get(key)!
+                let kind = t.kind
+                let weak = t.weak
+                if (kind == TypeKind.STRING && !t.CString) {
+                    kind = TypeKind.OBJECT
+                    weak = false
+                }
+                vs.push(`,JSC_VARIANT_TYPE_${TypeKinds[kind]},${weak ? 1 : 0},&${key}`)
+            }
+            vs.push(`,0x0ff)`)
+            return vs.join('')
+        }
+
     }
 
     debugger
     throw new Error(s.getText())
 }
 
-export function parseStatement(ctx: Context, s: ts.Statement): string {
+export function parseClosures(ctx: Context, s: ts.ConciseBody, closures: Closures): void {
+    
+}
+
+
+export function parseStatement(ctx: Context, s: ts.Statement, level: number): string {
 
     if (ts.isExpressionStatement(s)) {
-        return parseExpression(ctx, s.expression);
+        return `${parseExpression(ctx, s.expression)};`;
     } else if (ts.isVariableStatement(s)) {
         let n = 0;
         let vs: string[] = []
@@ -651,12 +999,54 @@ export function parseStatement(ctx: Context, s: ts.Statement): string {
             }, varType)
             n++;
         }
+        vs.push(';')
         return vs.join('')
     } else if (ts.isReturnStatement(s)) {
         if (s.expression) {
-            return `return (${parseExpression(ctx, s.expression)})`
+            if (ctx.returnType) {
+                let aType = parseVarTypeWithExpression(ctx, s.expression, ctx.returnType)
+                return `return ${assignVarType(ctx.returnType, aType, parseExpression(ctx, s.expression))};`
+            }
+            return `return ${parseExpression(ctx, s.expression)};`
         }
-        return 'return'
+        return 'return;'
+    } else if (ts.isIfStatement(s)) {
+        let vs: string[] = []
+        vs.push(`if(${parseExpression(ctx, s.expression)}) ${parseStatement(ctx, s.thenStatement, level)}`)
+        if (s.elseStatement) {
+            vs.push(`else ${parseStatement(ctx, s.elseStatement, level)}`)
+        }
+        return vs.join('')
+    } else if (ts.isBlock(s)) {
+        let vs: string[] = []
+        vs.push("{\n")
+        for (let e of s.statements) {
+            vs.push(`${"\t".repeat(level + 1)}${parseStatement(ctx, e, level + 1)}\n`)
+        }
+        vs.push(`${"\t".repeat(level)}}\n${"\t".repeat(level)}`)
+        return vs.join('')
+    } else if (ts.isWhileStatement(s)) {
+        return `while(${parseExpression(ctx, s.expression)}) ${parseStatement(ctx, s.statement, level)}`
+    } else if (ts.isBreakStatement(s)) {
+        return `break;`
+    } else if (ts.isSwitchStatement(s)) {
+        let vs: string[] = [];
+        vs.push(`switch(${parseExpression(ctx, s.expression)}) {\n`)
+        for (let i of s.caseBlock.clauses) {
+            if (ts.isCaseClause(i)) {
+                vs.push(`${"\t".repeat(level)}case ${parseExpression(ctx, i.expression)}:\n`)
+                for (let ss of i.statements) {
+                    vs.push(`${"\t".repeat(level + 1)}${parseStatement(ctx, ss, level + 1)}\n`)
+                }
+            } else if (ts.isDefaultClause(i)) {
+                vs.push(`${"\t".repeat(level)}default :\n`)
+                for (let ss of i.statements) {
+                    vs.push(`${"\t".repeat(level + 1)}${parseStatement(ctx, ss, level + 1)}\n`)
+                }
+            }
+        }
+        vs.push(`${"\t".repeat(level)}}\n${"\t".repeat(level)}`)
+        return vs.join('')
     }
 
     debugger
@@ -665,13 +1055,158 @@ export function parseStatement(ctx: Context, s: ts.Statement): string {
 
 }
 
+export function getClosuresDeclare(ctx: Context, func: Function, ex: boolean = false): ClosuresDeclare {
+    let ns: string[] = ['closures', 'declare']
+    ns.push(func.returnType.kind + '')
+    for (let i of func.arguments) {
+        ns.push(i.type.kind + '')
+    }
+    let key = ns.join('_')
+    for (let d of ctx.module.closureses) {
+        if (d.name.name == key) {
+            d.name.export = d.name.export || ex
+            return d
+        }
+    }
+    let r: ClosuresDeclare = {
+        name: {
+            name: key,
+            module: ctx.module.name,
+            export: ex
+        },
+        returnType: func.returnType,
+        arguments: func.arguments
+    }
+    ctx.module.closureses.push(r)
+    return r
+}
+
+export function scanningClosuresExpression(ctx: Context, s: ts.Expression): void {
+
+    if (ts.isParenthesizedExpression(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+    } else if (ts.isCallExpression(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+        for (let a of s.arguments) {
+            scanningClosuresExpression(ctx, a)
+        }
+    } else if (ts.isPropertyAccessExpression(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+    } else if (ts.isStringLiteral(s)) {
+    } else if (ts.isNumericLiteral(s)) {
+    } else if (ts.isBinaryExpression(s)) {
+        scanningClosuresExpression(ctx, s.left)
+        scanningClosuresExpression(ctx, s.right)
+    } else if (ts.isPrefixUnaryExpression(s)) {
+    } else if (ts.isPostfixUnaryExpression(s)) {
+    } else if (ts.isNewExpression(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+        if (s.arguments) {
+            for (let a of s.arguments) {
+                scanningClosuresExpression(ctx, a)
+            }
+        }
+    } else if (ts.isIdentifier(s)) {
+    } else if (s.kind == ts.SyntaxKind.FalseKeyword) {
+    } else if (s.kind == ts.SyntaxKind.TrueKeyword) {
+    } else if (s.kind == ts.SyntaxKind.UndefinedKeyword || s.kind == ts.SyntaxKind.NullKeyword) {
+    } else if (s.kind == ts.SyntaxKind.ThisKeyword || s.kind == ts.SyntaxKind.SuperKeyword) {
+    } else if (ts.isArrayLiteralExpression(s)) {
+        for (let a of s.elements) {
+            scanningClosuresExpression(ctx, a)
+        }
+    } else if (ts.isConditionalExpression(s)) {
+        scanningClosuresExpression(ctx, s.condition)
+        scanningClosuresExpression(ctx, s.whenTrue)
+        scanningClosuresExpression(ctx, s.whenFalse)
+    } else if (ts.isArrowFunction(s)) {
+
+        let func: Function = {
+            name: {
+                name: `closures_${ctx.module.functions.length}`,
+                module: ctx.module.name,
+                export: false
+            },
+            returnType: parseVarType(ctx, { kind: TypeKind.VOID }, s.type),
+            arguments: parseArguments(ctx, s.parameters),
+        };
+
+        func.arguments.unshift({ name: '__closures', type: { kind: TypeKind.OBJECT, isa: ClosuresClass } });
+
+        func.closures = getClosuresDeclare(ctx, func);
+
+        (s as any).__closures = new Closures(func, func.closures)
+
+        ctx.module.functions.push(func)
+
+        if (ts.isBlock(s.body)) {
+            for (let ss of s.body.statements) {
+                scanningClosuresStatement(ctx, ss)
+            }
+        } else {
+            scanningClosuresExpression(ctx, s.body)
+        }
+
+    }
+}
+
+export function scanningClosuresStatement(ctx: Context, s: ts.Statement): void {
+
+    if (ts.isExpressionStatement(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+    } else if (ts.isVariableStatement(s)) {
+        for (let i of s.declarationList.declarations) {
+            if (i.initializer) {
+                scanningClosuresExpression(ctx, i.initializer)
+            }
+        }
+    } else if (ts.isReturnStatement(s)) {
+        if (s.expression) {
+            scanningClosuresExpression(ctx, s.expression)
+        }
+    } else if (ts.isIfStatement(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+        scanningClosuresStatement(ctx, s.thenStatement)
+        if (s.elseStatement) {
+            scanningClosuresStatement(ctx, s.elseStatement)
+        }
+    } else if (ts.isBlock(s)) {
+        for (let e of s.statements) {
+            scanningClosuresStatement(ctx, e)
+        }
+    } else if (ts.isWhileStatement(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+        scanningClosuresStatement(ctx, s.statement)
+    } else if (ts.isBreakStatement(s)) {
+    } else if (ts.isSwitchStatement(s)) {
+        scanningClosuresExpression(ctx, s.expression)
+        let vs: string[] = [];
+        vs.push(`switch(${parseExpression(ctx, s.expression)}) {\n`)
+        for (let i of s.caseBlock.clauses) {
+            for (let ss of i.statements) {
+                scanningClosuresStatement(ctx, ss)
+            }
+        }
+    }
+
+}
+
+export function scanningClosures(ctx: Context, body: ts.FunctionBody): void {
+
+    for (let s of body.statements) {
+        scanningClosuresStatement(ctx, s)
+    }
+
+}
+
 export function parseBody(ctx: Context, node?: ts.FunctionBody): Body | undefined {
     if (node) {
         let _ctx = ctx.newContext({ scope: new Scope(ctx.scope) })
+        scanningClosures(_ctx, node)
         return (level: number = 0): string => {
             let vs: string[] = []
             for (let s of node.statements) {
-                vs.push(`${"\t".repeat(level)}${parseStatement(_ctx, s)};\n`)
+                vs.push(`${"\t".repeat(level)}${parseStatement(_ctx, s, level)}\n`)
             }
             return vs.join('')
         }
@@ -691,7 +1226,7 @@ export function parseFunction(ctx: Context, node: ts.FunctionDeclaration): void 
         arguments: parseArguments(ctx, node.parameters),
     }
 
-    let c = ctx.newContext({ scope: new Scope(ctx.scope) })
+    let c = ctx.newContext({ scope: new Scope(ctx.scope), returnType: v.returnType })
 
     for (let a of v.arguments) {
         c.scope.set({ name: a.name, module: ctx.module.name }, a.type)
@@ -705,6 +1240,16 @@ export function parseFunction(ctx: Context, node: ts.FunctionDeclaration): void 
         node.modifiers.forEach((item) => {
             if (item.kind == ts.SyntaxKind.ExportKeyword) {
                 v.name.export = true
+
+                if (v.returnType.closures) {
+                    v.returnType.closures.name.export = true
+                }
+
+                for (let i of v.arguments) {
+                    if (i.type.closures) {
+                        i.type.closures.name.export = true
+                    }
+                }
             }
         })
     }
@@ -752,7 +1297,7 @@ export function parseClass(ctx: Context, node: ts.ClassDeclaration): void {
                         let n = name.substring(i + 1)
                         if (m) {
                             for (let isa of m.classes) {
-                                if (name == isa.name.name) {
+                                if (n == isa.name.name) {
                                     v.base = isa;
                                     break
                                 }
@@ -805,19 +1350,57 @@ export function parseClass(ctx: Context, node: ts.ClassDeclaration): void {
                     }
                 })
             }
-            let c = _ctx.newContext({ scope: new Scope(), method: p })
+            if (v.name.export) {
+
+                if (p.returnType.closures) {
+                    p.returnType.closures.name.export = true
+                }
+
+                for (let i of p.arguments) {
+                    if (i.type.closures) {
+                        i.type.closures.name.export = true
+                    }
+                }
+            }
+            let c = _ctx.newContext({ scope: new Scope(), method: p, returnType: p.returnType })
             for (let a of p.arguments) {
                 c.scope.set({ name: a.name, module: _ctx.module.name }, a.type)
             }
             p.body = parseBody(c, item.body)
             parseDoc(_ctx, p, s)
             v.methods.push(p)
+        } else if (ts.isConstructorDeclaration(item)) {
+            let p: Method = {
+                name: {
+                    name: '__init',
+                    module: _ctx.module.name,
+                    export: v.name.export
+                },
+                returnType: { kind: TypeKind.VOID },
+                arguments: parseArguments(ctx, item.parameters)
+            }
+            let c = _ctx.newContext({ scope: new Scope(), method: p, returnType: p.returnType })
+            for (let a of p.arguments) {
+                c.scope.set({ name: a.name, module: _ctx.module.name }, a.type)
+            }
+            p.body = parseBody(c, item.body)
+            v.methods.push(p)
+
+            v.new = {
+                name: {
+                    name: 'new',
+                    module: _ctx.module.name,
+                    export: v.name.export
+                },
+                returnType: { kind: TypeKind.OBJECT, isa: v },
+                arguments: parseArguments(ctx, item.parameters)
+            }
         }
     })
 
 }
 
-export function parseConstExpression(ctx: Context, type: Type, s?: ts.Expression): string {
+export function parseConstExpression(ctx: Context, type: Type, doc: Doc, s?: ts.Expression): string {
     if (s) {
         if (ts.isStringLiteral(s)) {
             return JSON.stringify(s.text)
@@ -827,6 +1410,13 @@ export function parseConstExpression(ctx: Context, type: Type, s?: ts.Expression
             return '1'
         } else if (s.kind == ts.SyntaxKind.FalseKeyword) {
             return '0'
+        }
+    }
+    if (doc.tags) {
+        for (let t of doc.tags) {
+            if (t.name == 'value' && t.value) {
+                return t.value
+            }
         }
     }
     return toTypeDefaultValue(type)
@@ -849,25 +1439,59 @@ export function parseModule(ctx: Context, module: SourceFileModule): void {
                     name: { name: s.name, module: module.name },
                     type: parseVarType(_ctx, { kind: TypeKind.VARIANT }, d.type)
                 }
+
+                parseDoc(_ctx, v, s)
+
                 if (node.modifiers) {
                     node.modifiers.forEach((item) => {
                         if (item.kind == ts.SyntaxKind.ExportKeyword) {
                             v.name.export = true
                         } else if (item.kind == ts.SyntaxKind.ConstKeyword) {
-                            v.initializer = parseConstExpression(_ctx, v.type, d.initializer)
+                            v.initializer = parseConstExpression(_ctx, v.type, v, d.initializer)
                         }
                     })
                 }
 
-                if (v.type.kind == TypeKind.STRING && v.type.CString && !v.initializer) {
-                    v.initializer = parseConstExpression(_ctx, v.type, d.initializer)
+                if (!v.initializer) {
+                    if (d.initializer) {
+                        v.initializer = parseExpression(ctx, d.initializer)
+                    } else {
+                        v.initializer = parseConstExpression(_ctx, v.type, v, d.initializer)
+                    }
                 }
 
                 v.type.var = true
-                parseDoc(_ctx, v, s)
                 _ctx.scope.set(v.name, v.type)
                 _ctx.module.vars.push(v)
             }
+        } else if (ts.isEnumDeclaration(node)) {
+            let s = _ctx.checker.getSymbolAtLocation(node.name)!
+            let v: Enum = {
+                name: { name: s.name, module: module.name },
+                type: { kind: TypeKind.UINT8 },
+                items: []
+            }
+
+            v.type.enum = v
+
+            if (node.members.length > 0x10000) {
+                v.type.kind = TypeKind.UINT32
+            } else if (node.members.length > 0x100) {
+                v.type.kind = TypeKind.UINT16
+            }
+
+            parseDoc(_ctx, v, s)
+
+            for (let i of node.members) {
+                let ss = _ctx.checker.getSymbolAtLocation(i.name)!
+                let item: EnumItem = {
+                    name: ss.name,
+                }
+                parseDoc(_ctx, item, ss)
+                v.items.push(item)
+            }
+
+            _ctx.module.enums.push(v)
         }
 
     })
@@ -959,6 +1583,8 @@ export function parse(inDir: string, outDir: string, moduleName: string): void {
                 refClass: new Map<string, Class>(),
                 refFunction: new Map<string, Function>(),
                 refVar: new Map<string, Var>(),
+                refEnum: new Map<string, Enum>(),
+                enums: [],
                 vars: [],
                 name: {
                     dirs: ds.length > 0 ? ds : undefined,
@@ -966,6 +1592,7 @@ export function parse(inDir: string, outDir: string, moduleName: string): void {
                 },
                 includes: [],
                 functions: [],
+                closureses: [],
                 classes: [],
                 declare: sourceFile
             }

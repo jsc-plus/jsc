@@ -18,7 +18,7 @@ static void _jsc_DataView_alloc(struct jsc_class_t * isa, struct jsc_object_t * 
 static void _jsc_DataView_dealloc(struct jsc_class_t * isa, struct jsc_object_t * object);
 
 
-static struct jsc_ArrayBuffer_t * _jsc_DataView_buffer(jsc_class_t * isa, jsc_object_t * object);
+static jsc_object_t * _jsc_DataView_buffer(jsc_class_t * isa, jsc_object_t * object);
 static jsc_int_t _jsc_DataView_byteOffset(jsc_class_t * isa, jsc_object_t * object);
 static jsc_int_t _jsc_DataView_byteLength(jsc_class_t * isa, jsc_object_t * object);
 static jsc_int8_t _jsc_DataView_getInt8(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset);
@@ -32,6 +32,9 @@ static jsc_uint64_t _jsc_DataView_getUint64(jsc_class_t * isa, jsc_object_t * ob
 static jsc_float32_t _jsc_DataView_getFloat32(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_boolean_t littleEndian);
 static jsc_float64_t _jsc_DataView_getFloat64(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_boolean_t littleEndian);
 
+static jsc_string_t _jsc_DataView_getString(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset);
+static jsc_object_t * _jsc_DataView_getData(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int_t length);
+
 static void _jsc_DataView_setInt8(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int8_t value);
 static void _jsc_DataView_setUint8(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_uint8_t value);
 static void _jsc_DataView_setInt16(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int16_t value,jsc_boolean_t littleEndian);
@@ -43,6 +46,8 @@ static void _jsc_DataView_setUint64(jsc_class_t * isa, jsc_object_t * object,jsc
 static void _jsc_DataView_setFloat32(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_float32_t value,jsc_boolean_t littleEndian);
 static void _jsc_DataView_setFloat64(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_float64_t value,jsc_boolean_t littleEndian);
 
+static jsc_int_t _jsc_DataView_setString(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_string_t value);
+static jsc_int_t _jsc_DataView_setData(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_object_t * data);
 
 jsc_DataView_class_t jsc_DataView = { {&jsc_Object,sizeof(jsc_DataView_t),"DataView",
     _jsc_DataView_alloc,_jsc_DataView_dealloc,NULL,NULL,NULL,NULL,NULL,NULL},
@@ -60,6 +65,9 @@ jsc_DataView_class_t jsc_DataView = { {&jsc_Object,sizeof(jsc_DataView_t),"DataV
     _jsc_DataView_getFloat32,
     _jsc_DataView_getFloat64,
     
+    _jsc_DataView_getString,
+    _jsc_DataView_getData,
+    
     _jsc_DataView_setInt8,
     _jsc_DataView_setUint8,
     _jsc_DataView_setInt16,
@@ -71,9 +79,11 @@ jsc_DataView_class_t jsc_DataView = { {&jsc_Object,sizeof(jsc_DataView_t),"DataV
     _jsc_DataView_setFloat32,
     _jsc_DataView_setFloat64,
     
+    _jsc_DataView_setString,
+    _jsc_DataView_setData,
 };
 
-struct jsc_ArrayBuffer_t * jsc_DataView_buffer_(jsc_class_t * isa, jsc_object_t * object) {
+jsc_object_t * jsc_DataView_buffer_(jsc_class_t * isa, jsc_object_t * object) {
     
     if(isa == NULL || object == NULL) {
         return NULL;
@@ -305,6 +315,44 @@ jsc_float64_t jsc_DataView_getFloat64_(jsc_class_t * isa, jsc_object_t * object,
     return 0;
 }
 
+jsc_string_t jsc_DataView_getString_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset) {
+    
+    if(isa == NULL || object == NULL) {
+        return NULL;
+    }
+    
+    if(jsc_class_isKind(isa, &jsc_DataView.base)) {
+        jsc_DataView_class_t * s = (jsc_DataView_class_t *) isa;
+        if(s->getString) {
+            return (*s->getString)(isa,object,offset);
+        } else {
+            return jsc_DataView_getString_(isa->isa,object,offset);
+        }
+    }
+
+    return NULL;
+    
+}
+
+jsc_object_t * jsc_DataView_getData_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int_t length) {
+    
+    if(isa == NULL || object == NULL) {
+        return NULL;
+    }
+    
+    if(jsc_class_isKind(isa, &jsc_DataView.base)) {
+        jsc_DataView_class_t * s = (jsc_DataView_class_t *) isa;
+        if(s->getData) {
+            return (*s->getData)(isa,object,offset,length);
+        } else {
+            return jsc_DataView_getData_(isa->isa,object,offset,length);
+        }
+    }
+
+    return NULL;
+    
+}
+
 void jsc_DataView_setInt8_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int8_t value) {
     
     if(isa == NULL || object == NULL) {
@@ -459,8 +507,45 @@ void jsc_DataView_setFloat64_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t
     }
 }
 
+jsc_int_t jsc_DataView_setString_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_string_t value) {
+    
+    if(isa == NULL || object == NULL) {
+        return -1;
+    }
+    
+    if(jsc_class_isKind(isa, &jsc_DataView.base)) {
+        jsc_DataView_class_t * s = (jsc_DataView_class_t *) isa;
+        if(s->setString) {
+            (*s->setString)(isa,object,offset,value);
+        } else {
+            jsc_DataView_setString_(isa->isa,object,offset,value);
+        }
+    }
+    
+    return -1;
+}
 
-struct jsc_ArrayBuffer_t * jsc_DataView_buffer(jsc_object_t * object) {
+jsc_int_t jsc_DataView_setData_(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_object_t * data) {
+    
+    if(isa == NULL || object == NULL) {
+        return -1;
+    }
+    
+    if(jsc_class_isKind(isa, &jsc_DataView.base)) {
+        jsc_DataView_class_t * s = (jsc_DataView_class_t *) isa;
+        if(s->setData) {
+            (*s->setData)(isa,object,offset,data);
+        } else {
+            jsc_DataView_setData_(isa->isa,object,offset,data);
+        }
+    }
+    
+    return -1;
+    
+}
+
+
+jsc_object_t * jsc_DataView_buffer(jsc_object_t * object) {
     if(object == NULL) {
         return NULL;
     }
@@ -542,6 +627,20 @@ jsc_float64_t jsc_DataView_getFloat64(jsc_object_t * object,jsc_int_t offset,jsc
     return jsc_DataView_getFloat64_(object->isa,object,offset,littleEndian);
 }
 
+jsc_string_t jsc_DataView_getString(jsc_object_t * object,jsc_int_t offset) {
+    if(object == NULL) {
+        return NULL;
+    }
+    return jsc_DataView_getString_(object->isa,object,offset);
+}
+
+jsc_object_t * jsc_DataView_getData(jsc_object_t * object,jsc_int_t offset,jsc_int_t length) {
+    if(object == NULL) {
+        return NULL;
+    }
+    return jsc_DataView_getData_(object->isa,object,offset,length);
+}
+
 void jsc_DataView_setInt8(jsc_object_t * object,jsc_int_t offset,jsc_int8_t value) {
     if(object == NULL) {
         return;
@@ -606,13 +705,15 @@ void jsc_DataView_setFloat64(jsc_object_t * object,jsc_int_t offset,jsc_float64_
 
 
 /* alloc */
-struct jsc_DataView_t * jsc_DataView_alloc(jsc_ArrayBuffer_t * buffer,jsc_int_t offset,jsc_int_t length) {
+struct jsc_DataView_t * jsc_DataView_alloc(jsc_object_t * buffer,jsc_int_t offset,jsc_int_t length) {
     
-    if(buffer == NULL) {
+    if(buffer == NULL || !jsc_class_isKind(buffer->isa, (jsc_class_t *)&jsc_ArrayBuffer)) {
         return NULL;
     }
     
-    jsc_int_t len = buffer->_byteLength;
+    jsc_ArrayBuffer_t * buf = (jsc_ArrayBuffer_t *) buffer;
+    
+    jsc_int_t len = buf->_byteLength;
     
     if( offset < 0 ) {
         offset = len + offset;
@@ -628,7 +729,7 @@ struct jsc_DataView_t * jsc_DataView_alloc(jsc_ArrayBuffer_t * buffer,jsc_int_t 
 
     jsc_DataView_t * v = (jsc_DataView_t *) jsc_object_alloc(&jsc_DataView.base, 0);
   
-    jsc_setStrong((jsc_object_t **) &v->_buffer, (jsc_object_t *) buffer);
+    jsc_setStrong((jsc_object_t **) &v->_buffer,buffer);
     
     v->_byteOffset = offset;
     v->_byteLength = length;
@@ -636,7 +737,7 @@ struct jsc_DataView_t * jsc_DataView_alloc(jsc_ArrayBuffer_t * buffer,jsc_int_t 
     return v;
 }
 
-struct jsc_DataView_t * jsc_DataView_new(jsc_ArrayBuffer_t * buffer,jsc_int_t offset,jsc_int_t length) {
+struct jsc_DataView_t * jsc_DataView_new(jsc_object_t * buffer,jsc_int_t offset,jsc_int_t length) {
     jsc_DataView_t * v = jsc_DataView_alloc(buffer,offset,length);
     jsc_object_autorelease((jsc_object_t *) v);
     return v;
@@ -653,9 +754,9 @@ static void _jsc_DataView_dealloc(struct jsc_class_t * isa, struct jsc_object_t 
     jsc_setStrong((jsc_object_t **) &v->_buffer, NULL);
 }
 
-static struct jsc_ArrayBuffer_t * _jsc_DataView_buffer(jsc_class_t * isa, jsc_object_t * object) {
+static jsc_object_t * _jsc_DataView_buffer(jsc_class_t * isa, jsc_object_t * object) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    return v->_buffer;
+    return (jsc_object_t *) v->_buffer;
 }
 
 static jsc_int_t _jsc_DataView_byteOffset(jsc_class_t * isa, jsc_object_t * object) {
@@ -786,9 +887,25 @@ static jsc_float64_t _jsc_DataView_getFloat64(jsc_class_t * isa, jsc_object_t * 
     return * (jsc_float64_t *) &v;
 }
 
+static jsc_string_t _jsc_DataView_getString(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset) {
+    jsc_DataView_t * v = (jsc_DataView_t *) object;
+    return (jsc_string_t) (v->_buffer->_data + v->_byteOffset + offset);
+}
+
+static jsc_object_t * _jsc_DataView_getData(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int_t length) {
+    
+    jsc_DataView_t * v = (jsc_DataView_t *) object;
+    
+    if(v->_buffer == NULL || offset + length > v->_byteLength) {
+        return NULL;
+    }
+    
+    return (jsc_object_t *) jsc_DataView_new((jsc_object_t *) v->_buffer, v->_byteOffset + offset, length);
+}
+
 static void _jsc_DataView_setInt8(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int8_t value) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(1 > v->_byteLength) {
+    if(1 + offset> v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -797,7 +914,7 @@ static void _jsc_DataView_setInt8(jsc_class_t * isa, jsc_object_t * object,jsc_i
 
 static void _jsc_DataView_setUint8(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_uint8_t value) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(1 > v->_byteLength) {
+    if(1 + offset> v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -806,7 +923,7 @@ static void _jsc_DataView_setUint8(jsc_class_t * isa, jsc_object_t * object,jsc_
 
 static void _jsc_DataView_setInt16(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int16_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(2 > v->_byteLength) {
+    if(2 + offset> v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -820,7 +937,7 @@ static void _jsc_DataView_setInt16(jsc_class_t * isa, jsc_object_t * object,jsc_
 }
 static void _jsc_DataView_setUint16(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_uint16_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(2 > v->_byteLength) {
+    if(2 + offset > v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -834,7 +951,7 @@ static void _jsc_DataView_setUint16(jsc_class_t * isa, jsc_object_t * object,jsc
 }
 static void _jsc_DataView_setInt32(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int32_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(4 > v->_byteLength) {
+    if(4 + offset > v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -852,7 +969,7 @@ static void _jsc_DataView_setInt32(jsc_class_t * isa, jsc_object_t * object,jsc_
 }
 static void _jsc_DataView_setUint32(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_uint32_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(4 > v->_byteLength) {
+    if(4 + offset > v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -870,7 +987,7 @@ static void _jsc_DataView_setUint32(jsc_class_t * isa, jsc_object_t * object,jsc
 }
 static void _jsc_DataView_setInt64(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_int64_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(8 > v->_byteLength) {
+    if(8 + offset > v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -897,7 +1014,7 @@ static void _jsc_DataView_setInt64(jsc_class_t * isa, jsc_object_t * object,jsc_
 
 static void _jsc_DataView_setUint64(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_uint64_t value,jsc_boolean_t littleEndian) {
     jsc_DataView_t * v = (jsc_DataView_t *) object;
-    if(8 > v->_byteLength) {
+    if(8 + offset > v->_byteLength || v->_buffer == NULL) {
         return;
     }
     jsc_int_t i = v->_byteOffset + offset;
@@ -929,3 +1046,38 @@ static void _jsc_DataView_setFloat32(jsc_class_t * isa, jsc_object_t * object,js
 static void _jsc_DataView_setFloat64(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_float64_t value,jsc_boolean_t littleEndian) {
     _jsc_DataView_setUint64(isa,object,offset,* (jsc_uint64_t *) & value,littleEndian);
 }
+
+static jsc_int_t _jsc_DataView_setString(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_string_t value) {
+    jsc_DataView_t * v = (jsc_DataView_t *) object;
+    jsc_int_t n = value ? (jsc_int_t) strlen(value) + 1: 1;
+    if(n + offset > v->_byteLength || v->_buffer == NULL) {
+        return -1;
+    }
+    if(value) {
+        memcpy(v->_buffer->_data + v->_byteOffset + offset,value,n);
+    } else {
+        memset(v->_buffer->_data + v->_byteOffset + offset,0,n);
+    }
+    
+    return n;
+}
+
+static jsc_int_t _jsc_DataView_setData(jsc_class_t * isa, jsc_object_t * object,jsc_int_t offset,jsc_object_t * data) {
+    
+    jsc_DataView_t * v = (jsc_DataView_t *) object;
+    
+    if(v->_buffer == NULL || data == NULL || !jsc_class_isKind(data->isa, (jsc_class_t *) &jsc_DataView)) {
+        return -1;
+    }
+    
+    jsc_DataView_t * d = (jsc_DataView_t *) data;
+    
+    if(offset + d->_byteLength > v->_byteLength || d->_buffer == NULL) {
+        return -1;
+    }
+    
+    memcpy(v->_buffer->_data + v->_byteOffset + offset,d->_buffer->_data + d->_byteOffset,d->_byteLength);
+    
+    return d->_byteLength;
+}
+

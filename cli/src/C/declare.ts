@@ -2,7 +2,7 @@ import * as ts from "typescript"
 import * as fs from "fs"
 import * as path from "path"
 import { Context, mkdir, parseModule, SourceFileModule } from "./parse";
-import { Class, isEmptyModule, Module, Scope, Var, Function } from "./types";
+import { Class, isEmptyModule, Module, Scope, Var, Function, Enum } from "./types";
 import { toSource } from "./source";
 
 
@@ -27,11 +27,14 @@ export function parseDeclareModule(ctx: Context, sourceFile: ts.SourceFile, node
                 refClass: new Map<string, Class>(),
                 refFunction: new Map<string, Function>(),
                 refVar: new Map<string, Var>(),
+                refEnum: new Map<string, Enum>(),
                 vars: [],
+                enums: [],
                 name: {
                     name: vs.join('_')
                 },
                 includes: [],
+                closureses: [],
                 functions: [],
                 classes: [],
                 declare: item.body
@@ -130,16 +133,22 @@ export function parse(inFile: string, outDir: string): void {
             classes: {},
         };
 
-        moduleSet.forEach((item, name) => {
+        moduleSet.forEach((item) => {
             if (item.source && !isEmptyModule(item)) {
+                let ns: string[] = []
+                if (item.name.dirs) {
+                    ns = ns.concat(item.name.dirs)
+                }
+                ns.push(item.name.name)
+                let name = ns.join('.')
                 for (let v of item.vars) {
-                    info.vars[`${name}_${v.name}`] = v
+                    info.vars[`${name}.${v.name.name}`] = v
                 }
                 for (let v of item.functions) {
-                    info.functions[`${name}_${v.name}`] = v
+                    info.functions[`${name}.${v.name.name}`] = v
                 }
                 for (let v of item.classes) {
-                    info.classes[`${name}_${v.name}`] = v
+                    info.classes[`${name}.${v.name.name}`] = v
                 }
             }
         })

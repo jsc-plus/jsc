@@ -1,0 +1,336 @@
+{
+  "vars": {},
+  "functions": {
+    "Typeof.isNil": {
+      "name": {
+        "name": "isNil",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isInt8": {
+      "name": {
+        "name": "isInt8",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isUint8": {
+      "name": {
+        "name": "isUint8",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isInt16": {
+      "name": {
+        "name": "isInt16",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isUint16": {
+      "name": {
+        "name": "isUint16",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isInt32": {
+      "name": {
+        "name": "isInt32",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isUint32": {
+      "name": {
+        "name": "isUint32",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isInt64": {
+      "name": {
+        "name": "isInt64",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isUint64": {
+      "name": {
+        "name": "isUint64",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isFloat32": {
+      "name": {
+        "name": "isFloat32",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isFloat64": {
+      "name": {
+        "name": "isFloat64",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isBoolean": {
+      "name": {
+        "name": "isBoolean",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isString": {
+      "name": {
+        "name": "isString",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isUnichar": {
+      "name": {
+        "name": "isUnichar",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    },
+    "Typeof.isObject": {
+      "name": {
+        "name": "isObject",
+        "module": {
+          "name": "Typeof"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 18
+      },
+      "arguments": [
+        {
+          "name": "v",
+          "type": {
+            "kind": 3
+          }
+        }
+      ],
+      "title": "",
+      "tags": []
+    }
+  },
+  "classes": {}
+}

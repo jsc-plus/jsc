@@ -1,0 +1,671 @@
+{
+  "vars": {
+    "Math.E": {
+      "name": {
+        "name": "E",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The mathematical constant e. This is Euler's jsc.float64, the base of natural logarithms.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "2.718281828459045"
+        }
+      ],
+      "initializer": "2.718281828459045"
+    },
+    "Math.LN10": {
+      "name": {
+        "name": "LN10",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The natural logarithm of 10.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "2.302585092994046"
+        }
+      ],
+      "initializer": "2.302585092994046"
+    },
+    "Math.LN2": {
+      "name": {
+        "name": "LN2",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The natural logarithm of 2.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "0.6931471805599453"
+        }
+      ],
+      "initializer": "0.6931471805599453"
+    },
+    "Math.LOG2E": {
+      "name": {
+        "name": "LOG2E",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The base-2 logarithm of e.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "1.4426950408889634"
+        }
+      ],
+      "initializer": "1.4426950408889634"
+    },
+    "Math.LOG10E": {
+      "name": {
+        "name": "LOG10E",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The base-10 logarithm of e.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "0.4342944819032518"
+        }
+      ],
+      "initializer": "0.4342944819032518"
+    },
+    "Math.PI": {
+      "name": {
+        "name": "PI",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "Pi. This is the ratio of the circumference of a circle to its diameter.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "3.141592653589793"
+        }
+      ],
+      "initializer": "3.141592653589793"
+    },
+    "Math.SQRT1_2": {
+      "name": {
+        "name": "SQRT1_2",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The square root of 0.5, or, equivalently, one divided by the square root of 2.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "0.7071067811865476"
+        }
+      ],
+      "initializer": "0.7071067811865476"
+    },
+    "Math.SQRT2": {
+      "name": {
+        "name": "SQRT2",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "type": {
+        "kind": 17,
+        "var": true
+      },
+      "title": "The square root of 2.",
+      "tags": [
+        {
+          "name": "value",
+          "value": "1.4142135623730951"
+        }
+      ],
+      "initializer": "1.4142135623730951"
+    }
+  },
+  "functions": {
+    "Math.abs": {
+      "name": {
+        "name": "abs",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the absolute value of a jsc.float64 (the value without regard to whether it is positive or negative).\nFor example, the absolute value of -5 is the same as the absolute value of 5.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression for which the absolute value is needed."
+        }
+      ]
+    },
+    "Math.acos": {
+      "name": {
+        "name": "acos",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the arc cosine (or inverse cosine) of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.asin": {
+      "name": {
+        "name": "asin",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the arcsine of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.atan": {
+      "name": {
+        "name": "atan",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the arctangent of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression for which the arctangent is needed."
+        }
+      ]
+    },
+    "Math.atan2": {
+      "name": {
+        "name": "atan2",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "y",
+          "type": {
+            "kind": 17
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the angle (in radians) from the X axis to a point.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "y   A numeric expression representing the cartesian y-coordinate."
+        },
+        {
+          "name": "param",
+          "value": "x   A numeric expression representing the cartesian x-coordinate."
+        }
+      ]
+    },
+    "Math.ceil": {
+      "name": {
+        "name": "ceil",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the smallest integer greater than or equal to its numeric argument.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.cos": {
+      "name": {
+        "name": "cos",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the cosine of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression that contains an angle measured in radians."
+        }
+      ]
+    },
+    "Math.exp": {
+      "name": {
+        "name": "exp",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns e (the base of natural logarithms) raised to a power.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression representing the power of e."
+        }
+      ]
+    },
+    "Math.floor": {
+      "name": {
+        "name": "floor",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 10
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the greatest integer less than or equal to its numeric argument.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.log": {
+      "name": {
+        "name": "log",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the natural logarithm (base e) of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.max": {
+      "name": {
+        "name": "max",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "a",
+          "type": {
+            "kind": 17
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the larger of a set of supplied numeric expressions.",
+      "tags": []
+    },
+    "Math.min": {
+      "name": {
+        "name": "min",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "a",
+          "type": {
+            "kind": 17
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the smaller of a set of supplied numeric expressions.",
+      "tags": []
+    },
+    "Math.pow": {
+      "name": {
+        "name": "pow",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the value of a base expression taken to a specified power.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   The base value of the expression."
+        },
+        {
+          "name": "param",
+          "value": "y   The exponent value of the expression."
+        }
+      ]
+    },
+    "Math.random": {
+      "name": {
+        "name": "random",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [],
+      "title": "Returns a pseudorandom jsc.float64 between 0 and 1.",
+      "tags": []
+    },
+    "Math.round": {
+      "name": {
+        "name": "round",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 10
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns a supplied numeric expression rounded to the nearest integer.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   The value to be rounded to the nearest integer."
+        }
+      ]
+    },
+    "Math.sin": {
+      "name": {
+        "name": "sin",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the sine of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression that contains an angle measured in radians."
+        }
+      ]
+    },
+    "Math.sqrt": {
+      "name": {
+        "name": "sqrt",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the square root of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression."
+        }
+      ]
+    },
+    "Math.tan": {
+      "name": {
+        "name": "tan",
+        "module": {
+          "name": "Math"
+        },
+        "export": true
+      },
+      "returnType": {
+        "kind": 17
+      },
+      "arguments": [
+        {
+          "name": "x",
+          "type": {
+            "kind": 17
+          }
+        }
+      ],
+      "title": "Returns the tangent of a jsc.float64.",
+      "tags": [
+        {
+          "name": "param",
+          "value": "x   A numeric expression that contains an angle measured in radians."
+        }
+      ]
+    }
+  },
+  "classes": {}
+}

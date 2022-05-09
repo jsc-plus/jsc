@@ -78,7 +78,7 @@ static jsc_long_t _jsc_File_seek(jsc_class_t * __isa, jsc_object_t * __object, j
         return -1;
     }
     
-    return lseek(s->_fd, off, mode);
+    return (jsc_long_t) lseek(s->_fd, (off_t) off, mode);
 }
 
 static jsc_long_t _jsc_File_write(jsc_class_t * __isa, jsc_object_t * __object, jsc_object_t * data) {
@@ -121,7 +121,7 @@ jsc_object_t * jsc_fs_stat(jsc_string_t path) {
     jsc_fs_Stat_t * s = (jsc_fs_Stat_t *) jsc_object_new((jsc_class_t *) &jsc_fs_Stat, 0);
     
     s->_isDir = S_ISDIR(st.st_mode);
-    s->_size = st.st_size;
+    s->_size = (jsc_ulong_t) st.st_size;
    
 #if defined(__APPLE__)
     s->_mtime = st.st_mtimespec.tv_sec * 1000 + st.st_mtimespec.tv_nsec / 1000;

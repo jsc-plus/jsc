@@ -67,7 +67,7 @@ extern "C" {
     extern jsc_variant_t const jsc_Nil;
 
     inline static struct jsc_variant_t jsc_variant_Object(struct jsc_object_t * object) {
-        jsc_variant_t v;
+        jsc_variant_t v = jsc_Nil;
         if(object == NULL) {
             v.type = JSC_VARIANT_TYPE_NIL;
             v.uint64Value = 0;
@@ -81,7 +81,7 @@ extern "C" {
     }
 
     inline static struct jsc_variant_t jsc_variant_CString(jsc_string_t s) {
-        jsc_variant_t v;
+        jsc_variant_t v = jsc_Nil;
         if(s == NULL) {
             v.type = JSC_VARIANT_TYPE_NIL;
             v.uint64Value = 0;
@@ -94,8 +94,94 @@ extern "C" {
         return v;
     }
 
+    inline static struct jsc_variant_t jsc_variant_int8(jsc_int8_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_INT8;
+        v.int8Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_uint8(jsc_uint8_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_UINT8;
+        v.uint8Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_int16(jsc_int16_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_INT16;
+        v.int16Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_uint16(jsc_uint16_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_UINT16;
+        v.uint16Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_int32(jsc_int32_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_INT32;
+        v.int32Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_uint32(jsc_uint32_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_UINT32;
+        v.uint32Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_int64(jsc_int64_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_INT64;
+        v.int64Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_uint64(jsc_uint64_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_UINT64;
+        v.uint64Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_float32(jsc_float32_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_FLOAT32;
+        v.float32Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_float64(jsc_float64_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_FLOAT64;
+        v.float64Value = s;
+        return v;
+    }
+
+    inline static struct jsc_variant_t jsc_variant_boolean(jsc_boolean_t s) {
+        jsc_variant_t v = jsc_Nil;
+        v.type = JSC_VARIANT_TYPE_BOOLEAN;
+        v.booleanValue = s;
+        return v;
+    }
+
     jsc_string_t jsc_variant_toCStringWithBuffer(struct jsc_variant_t v,struct jsc_buffer_t * buf);
     jsc_string_t jsc_variant_toCString(struct jsc_variant_t v);
+    jsc_int8_t jsc_variant_toInt8(struct jsc_variant_t v);
+    jsc_uint8_t jsc_variant_toUint8(struct jsc_variant_t v);
+    jsc_int16_t jsc_variant_toInt16(struct jsc_variant_t v);
+    jsc_uint16_t jsc_variant_toUint16(struct jsc_variant_t v);
+    jsc_int32_t jsc_variant_toInt32(struct jsc_variant_t v);
+    jsc_uint32_t jsc_variant_toUint32(struct jsc_variant_t v);
+    jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v);
+    jsc_uint64_t jsc_variant_toUint64(struct jsc_variant_t v);
+    jsc_float32_t jsc_variant_toFloat32(struct jsc_variant_t v);
     jsc_float64_t jsc_variant_toFloat64(struct jsc_variant_t v);
     jsc_int64_t jsc_variant_toInt64(struct jsc_variant_t v);
     jsc_boolean_t jsc_variant_toBoolean(struct jsc_variant_t v);
@@ -103,7 +189,20 @@ extern "C" {
     jsc_ulong_t jsc_variant_hashCode(struct jsc_variant_t a);
     struct jsc_object_t * jsc_variant_toObject(struct jsc_variant_t v);
     void jsc_variant_setStrong(struct jsc_variant_t * a,struct jsc_variant_t v);
+    void jsc_variant_setWeak(struct jsc_variant_t * a,struct jsc_variant_t v);
     struct jsc_variant_t jsc_variant_getStrong(struct jsc_variant_t v);
+
+    jsc_long_t jsc_variant_strict_compare(struct jsc_variant_t a, struct jsc_variant_t b);
+
+    jsc_variant_t jsc_variant_add(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_sub(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_mul(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_div(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_mod(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_bit_and(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_bit_or(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_bit_xor(struct jsc_variant_t a, struct jsc_variant_t b);
+    jsc_variant_t jsc_variant_bit_opp(struct jsc_variant_t a);
 
 #ifdef __cplusplus
 }

@@ -21,7 +21,6 @@ export enum TypeKind {
     BOOLEAN,
     UNICHAR,
     STRING,
-    PTR,
 }
 
 export var TypeKinds: string[] = [
@@ -46,17 +45,17 @@ export var TypeKinds: string[] = [
     'BOOLEAN',
     'UNICHAR',
     'STRING',
-    'PTR'
 ]
 
 export interface Type {
     kind: TypeKind
-    isa?: Class
-    func?: Function
+    isa?: Class | string
     weak?: boolean
     var?: boolean
     property?: boolean
     CString?: boolean
+    enum?: Enum
+    closures?: ClosuresDeclare
 }
 
 export type Body = (level?: number) => string
@@ -87,11 +86,18 @@ export interface Symbol {
     name: string
 }
 
+export interface ClosuresDeclare extends Doc {
+    name: Symbol
+    returnType: Type
+    arguments: Argument[]
+}
+
 export interface Function extends Doc {
     name: Symbol
     returnType: Type
     arguments: Argument[]
     body?: Body
+    closures?: ClosuresDeclare
 }
 
 export interface Method extends Function {
@@ -109,6 +115,16 @@ export interface Var extends Doc {
     initializer?: string
 }
 
+export interface EnumItem extends Doc {
+    name: string
+}
+
+export interface Enum extends Doc {
+    name: Symbol
+    type: Type
+    items: EnumItem[]
+}
+
 export interface Class extends Doc {
     base?: Class
     name: Symbol
@@ -123,8 +139,11 @@ export interface Module extends Doc {
     refClass: Map<string, Class>
     refFunction: Map<string, Function>
     refVar: Map<string, Var>
+    refEnum: Map<string, Enum>
+    enums: Enum[]
     vars: Var[]
     includes: Symbol[]
+    closureses: ClosuresDeclare[]
     functions: Function[]
     classes: Class[]
 }
@@ -159,8 +178,52 @@ export class Scope {
         }
     }
 
+    hasLocal(name: string): boolean {
+        return this._varSet.has(name)
+    }
+
     set(name: Symbol, type: Type): void {
         this._varSet.set(name.name, { name: name, type: type })
     }
 
 }
+
+export class Closures {
+
+    protected _typeSet: Map<string, Type>
+    protected _keys: string[]
+
+    readonly func: Function
+    readonly declare: ClosuresDeclare
+
+    constructor(func: Function, declare: ClosuresDeclare) {
+        this.func = func
+        this.declare = declare
+        this._typeSet = new Map<string, Type>()
+        this._keys = []
+    }
+
+    add(key: string, type: Type): Type {
+        if (this._typeSet.has(key)) {
+            return this._typeSet.get(key)!
+        }
+        let t: any = {}
+        for (let key in type) {
+            t[key] = (type as any)[key]
+        }
+        t.closures = this
+        t.index = this._keys.length
+        this._typeSet.set(key, t)
+        this._keys.push(key)
+        return t
+    }
+
+    get keys(): string[] {
+        return this._keys
+    }
+
+    get(key: string): Type | undefined {
+        return this._typeSet.get(key)
+    }
+
+}   
